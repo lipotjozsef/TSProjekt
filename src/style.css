@@ -1,0 +1,23 @@
+* {
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 14px;
+}
+
+
+/* Mobil eszközök */
+@media only screen and (max-width: 360px)
+{
+  body { background-color: #FF0000; }
+}
+
+/* Tablet eszközök */
+@media only screen and (max-width: 768px)
+{
+  body { background-color: #00FF00; }
+}
+
+/* Asztali eszközök */
+@media only screen and (max-width: 1200px)
+{
+  body { background-color: #0000FF; }
+}

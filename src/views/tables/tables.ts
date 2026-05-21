@@ -29,6 +29,7 @@ export function init(parent: HTMLElement, _: Function)
   createTableModalTeams();
 
   listenForTableModal();
+  listenForDetailModal();
 }
 
 function loadTableModal()
@@ -58,8 +59,6 @@ function listenForTableModal(): void
     const data = new FormData(form);
     let tableName = data.get("tableName")!.toString();
     let teams = data.getAll("csapat_id").map(val => val.toString());
-
-    console.log(teams);
     
     if (!tableName)
     {
@@ -85,6 +84,27 @@ function listenForTableModal(): void
     }
 
     form.reset();
+  });
+}
+
+function listenForDetailModal()
+{
+  const deleteButton = application.querySelector<HTMLButtonElement>("#btn-detail-delete");
+
+  if (!deleteButton)
+    return;
+
+  deleteButton.addEventListener("click", () =>
+  {
+    const tableHiddenInput = application.querySelector<HTMLInputElement>("#view-table-id");
+    if (!tableHiddenInput)
+      return;
+
+    const tableID = Number.parseInt(tableHiddenInput.value);
+
+    TableManager.deleteTable(tableID);
+
+    tableHiddenInput.value = '-1';
   });
 }
 
@@ -115,7 +135,7 @@ function listenForTableChange(): void
 
     tableContainer.innerHTML = '';
 
-    TableManager.getTables.forEach((table: ITable) =>
+    TableManager.getTables.forEach((table: ITable, tableIndex: number) =>
     {
       const parentrow = createElement<HTMLElement>(
         {
@@ -131,16 +151,19 @@ function listenForTableChange(): void
           <p>${table.name}</p>
         </div>
         <div class="col-6 text-end">
-          <a href="#" class="btn-table-detail">Részletek</a>
+          <button type="button" class="btn-link text-decoration-underline text-primary" data-bs-toggle="modal" data-bs-target="#details-model">
+            Részletek
+          </button>
         </div>
       `;
 
-      parentrow.querySelector<HTMLElement>(".btn-table-detail")!.addEventListener("click", (ev) =>
+      parentrow.querySelector<HTMLButtonElement>(".btn-link")?.addEventListener("click", () =>
       {
-        ev.preventDefault();
-
-        alert("details " + table.name);
-      })
+          const tableHiddenInput = application.querySelector<HTMLInputElement>("#view-table-id");
+          if (!tableHiddenInput)
+            return;
+          tableHiddenInput.value = tableIndex.toString();
+      });
     }
     )
   });

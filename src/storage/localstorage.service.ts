@@ -62,10 +62,18 @@ export abstract class TableManager
             teams: teams
         } as ITable;
 
-        console.log(newTable);
-
         TableManager.tables.push(newTable);
 
         TableManager.saveStorage();
+    }
+
+    static deleteTable(tableID: number): void
+    {
+        if (tableID == -1)
+            return;
+
+        this.tables.splice(tableID, 1);
+
+        this.saveStorage();
     }
 }

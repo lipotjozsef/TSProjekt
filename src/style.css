@@ -10,20 +10,3 @@ body
   transition: 1.5s;
 }
 
-/* Mobil eszközök */
-@media only screen and (min-width: 360px)
-{
-  body { --bs-body-bg: #FF0000; }
-}
-
-/* Tablet eszközök */
-@media only screen and (min-width: 768px)
-{
-  body { --bs-body-bg: #00FF00; }
-}
-
-/* Asztali eszközök */
-@media only screen and (min-width: 1200px)
-{
-  body { --bs-body-bg: #0000FF; }
-}

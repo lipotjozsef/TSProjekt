@@ -8,7 +8,7 @@ export abstract class TableManager
     private static EventTables = new CustomEvent("tableschanged");
     static readonly CallTablesEvent: Function = function() { window.dispatchEvent(TableManager.EventTables); }
 
-    static get tablesJSON(): string
+    private static get tablesJSON(): string
     {
         return JSON.stringify(
             {
@@ -17,14 +17,27 @@ export abstract class TableManager
         );
     }
 
+    static get getTablesLenght(): Number
+    {
+        return this.tables.length;
+    }
+
+    static get getTables(): readonly ITable[]
+    {
+        const tablesValue = this.tables.slice();
+        return tablesValue;
+    }
+
     static saveStorage(): void
     {
+
         if (TableManager.tables.length == 0)
             return;
 
         const json = TableManager.tablesJSON;
 
         localStorage.setItem(TableManager.STORAGEKEY, json);
+        TableManager.CallTablesEvent();
     }
 
     static loadStorage(): void
@@ -39,6 +52,7 @@ export abstract class TableManager
 
         const data = JSON.parse(raw);
         TableManager.tables = Object.values(data['tables']);
+        TableManager.CallTablesEvent();
     }
 
     static addTable(tableName: string, teams: string[]): void
@@ -52,7 +66,6 @@ export abstract class TableManager
 
         TableManager.tables.push(newTable);
 
-        TableManager.CallTablesEvent();
         TableManager.saveStorage();
     }
 }

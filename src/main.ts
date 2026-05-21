@@ -2,11 +2,7 @@ import './style.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
 
-import { HttpService, CategoryID } from './api/http.service'
-import { TableManager } from './storage/localstorage.service'
-import * as HttpInterfaces from './types/TSTypes';
-
-import tablesHTML from "../src/components/tables.html?raw"
+import { HttpService } from './api/http.service'
 
 const myApp: HTMLElement | null = document.querySelector("#app");
 
@@ -14,24 +10,42 @@ document.body.onload = initialize;
 
 async function initialize(): Promise<void>
 {
-  TableManager.loadStorage();
+  if (window.location.pathname.includes("static"))
+  {
+    console.log("Statikus oldal! Dinamikus oldal betöltés kihagyása!");
+    return;
+  }
 
   await tryUpdateCache();
 
   if (!myApp)
     throw new Error("Could not find #app div element!");
-
   myApp.className =  "bg-light";
+  
+  await loadView('main', myApp);
+}
 
-  myApp!.innerHTML =
-  `
-    ${tablesHTML}
-  `;
+async function loadView(viewName: string, parent: HTMLElement): Promise<void>
+{
+  if (!myApp)
+    return;
 
-  createTableModalTeams();
+  try
+  {
+    const htmlModule = await import(`./views/${viewName}/${viewName}.html?raw`);
+    const htmlContent = htmlModule.default;
 
-  listenForTableModal();
-  listenForTableChange();
+    parent.innerHTML = htmlContent;
+
+    const scriptModule = await import(`./views/${viewName}/${viewName}.ts`);
+
+    await scriptModule.init(myApp, loadView);
+  }
+  catch (error)
+  {
+    console.error('A nézetet nem sikerült betölteni: ', viewName, error);
+    myApp.innerHTML = '<div class="alert alert-danger">Az oldal betöltése sikertelen volt.</div>';
+  }
 }
 
 async function tryUpdateCache(): Promise<void>
@@ -50,83 +64,4 @@ async function tryUpdateCache(): Promise<void>
     let myError = err as Error;
     alert(myError.message);
   }
-}
-
-function listenForTableModal(): void
-{
-  const form: HTMLFormElement | null = document.querySelector("#table-form-modal");
-
-  if (!form)
-    throw new Error("The form was not found!");
-
-  form.addEventListener("submit", (ev: SubmitEvent) =>
-  {
-    ev.preventDefault();
-
-    const data: FormData = new FormData(form);
-    let tableName = data.get("tableName")!.toString();
-    let teams: string[] = [];
-
-    Array.from(data.entries()).forEach(([key, value]) =>
-    {
-      if (key.includes("csapat_id"))
-        teams.push(value.toString());
-    });
-
-    TableManager.addTable(tableName, teams);
-
-    form.reset();
-
-  });
-}
-
-function listenForTableChange(): void
-{
-  window.addEventListener("tableschanged", () =>
-  {
-    
-  });
-}
-
-function createTableModalTeams(): void
-{
-  const divModalTeam: HTMLElement | null = myApp!.querySelector("#team-body");
-
-  if (!divModalTeam)
-    return;
-
-  HttpService.getTeams.forEach(team =>
-  {
-    divModalTeam.appendChild(
-      createTeamInput(team)
-    );
-  })
-}
-
-function createTeamInput(team: HttpInterfaces.ITeam): HTMLElement
-{
-
-  const parent: HTMLElement = document.createElement("div");
-  parent.className = "form-check";
-
-  const teamIDValue: string = team.id!.toString();
-
-  const checkbox: HTMLInputElement = document.createElement("input");
-  const checkboxID: string = `csapat_id_${teamIDValue}`;
-  checkbox.className = "form-check-input";
-  checkbox.type = "checkbox";
-  checkbox.id = checkboxID;
-  checkbox.name = checkboxID;
-  checkbox.value = teamIDValue;
-
-  parent.appendChild(checkbox);
-
-  const teamLabel: HTMLLabelElement = document.createElement("label");
-  teamLabel.className = "form-check-label";
-  teamLabel.setAttribute("for", checkboxID);
-  teamLabel.innerText = team.name;
-
-  parent.appendChild(teamLabel);
-
-  return parent;
 }

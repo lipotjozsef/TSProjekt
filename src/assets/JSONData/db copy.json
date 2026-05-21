@@ -1,0 +1,142 @@
+{
+  "teams": [
+    {
+      "id": "1",
+      "name": "Budapest Sasok",
+      "points": 22,
+      "played": 10,
+      "wins": 7,
+      "draws": 3,
+      "loses": 0
+    },
+    {
+      "id": "2",
+      "name": "Tisza-parti FC",
+      "points": 15,
+      "played": 10,
+      "wins": 4,
+      "draws": 3,
+      "loses": 3
+    },
+    {
+      "id": "3",
+      "name": "Bakonyi Betyárok",
+      "points": 6,
+      "played": 10,
+      "wins": 1,
+      "draws": 3,
+      "loses": 6
+    }
+  ],
+  "players": [
+    {
+      "id": "1",
+      "teamID": 1,
+      "name": "Kovács László",
+      "goals": 0,
+      "matches": 10,
+      "skill": 85,
+      "position": "Kapus"
+    },
+    {
+      "id": "2",
+      "teamID": 1,
+      "name": "Szabó Márk",
+      "goals": 12,
+      "matches": 10,
+      "skill": 92,
+      "position": "Csatár"
+    },
+    {
+      "id": "3",
+      "teamID": 1,
+      "name": "Nagy Péter",
+      "goals": 4,
+      "matches": 9,
+      "skill": 78,
+      "position": "Középső középpályás"
+    },
+    {
+      "id": "4",
+      "teamID": 1,
+      "name": "Tóth Gábor",
+      "goals": 1,
+      "matches": 10,
+      "skill": 82,
+      "position": "Középhátvéd"
+    },
+    {
+      "id": "5",
+      "teamID": 2,
+      "name": "Horváth Bence",
+      "goals": 0,
+      "matches": 10,
+      "skill": 75,
+      "position": "Kapus"
+    },
+    {
+      "id": "6",
+      "teamID": 2,
+      "name": "Kiss Ádám",
+      "goals": 8,
+      "matches": 10,
+      "skill": 80,
+      "position": "Jobb szélső támadó"
+    },
+    {
+      "id": "7",
+      "teamID": 2,
+      "name": "Molnár Dávid",
+      "goals": 2,
+      "matches": 8,
+      "skill": 74,
+      "position": "Védekező középpályás"
+    },
+    {
+      "id": "8",
+      "teamID": 2,
+      "name": "Farkas Tamás",
+      "goals": 5,
+      "matches": 10,
+      "skill": 88,
+      "position": "Árnyékék"
+    },
+    {
+      "id": "9",
+      "teamID": 3,
+      "name": "Balogh Zoltán",
+      "goals": 0,
+      "matches": 10,
+      "skill": 68,
+      "position": "Kapus"
+    },
+    {
+      "id": "10",
+      "teamID": 3,
+      "name": "Papp Krisztián",
+      "goals": 3,
+      "matches": 10,
+      "skill": 70,
+      "position": "Bal hátvéd"
+    },
+    {
+      "id": "11",
+      "teamID": 3,
+      "name": "Varga Roland",
+      "goals": 1,
+      "matches": 7,
+      "skill": 65,
+      "position": "Középső középpályás"
+    },
+    {
+      "id": "12",
+      "teamID": 3,
+      "name": "Simon Attila",
+      "goals": 4,
+      "matches": 10,
+      "skill": 72,
+      "position": "Csatár"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

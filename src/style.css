@@ -7,23 +7,29 @@ body
 {
   width: 100vw;
   height: 100vh;
-  transition: 1.5s;
+  /*transition: 1.5s;*/
+}
+
+#app .position-absolute
+{
+  height: 80vh;
 }
 
 /* Mobil eszközök */
-@media only screen and (min-width: 360px)
+/* @media only screen and (min-width: 360px)
 {
   body { --bs-body-bg: #FF0000; }
-}
+} */
 
 /* Tablet eszközök */
-@media only screen and (min-width: 768px)
+
+/* @media only screen and (min-width: 768px)
 {
   body { --bs-body-bg: #00FF00; }
-}
+} */
 
 /* Asztali eszközök */
-@media only screen and (min-width: 1200px)
+/* @media only screen and (min-width: 1200px)
 {
   body { --bs-body-bg: #0000FF; }
-}
+} */

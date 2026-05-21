@@ -30,15 +30,6 @@
   ],
   "players": [
     {
-      "id": "1",
-      "teamID": 1,
-      "name": "Kovács László",
-      "goals": 0,
-      "matches": 10,
-      "skill": 85,
-      "position": "Kapus"
-    },
-    {
       "id": "2",
       "teamID": 1,
       "name": "Szabó Márk",

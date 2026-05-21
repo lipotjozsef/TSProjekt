@@ -20,6 +20,7 @@ body
   border: none;
 }
 
+<<<<<<< HEAD:public/styles/style.css
 /* Mobil eszközök */
 /* @media only screen and (min-width: 360px)
 {
@@ -38,3 +39,5 @@ body
 {
   body { --bs-body-bg: #0000FF; }
 } */
+=======
+>>>>>>> e66783a (20260521 | staches commit):src/style.css

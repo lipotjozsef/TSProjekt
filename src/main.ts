@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
 
 import { HttpService, CategoryID } from './api/http.service'
+import { TableManager } from './storage/localstorage.service'
 import * as HttpInterfaces from './types/TSTypes';
 
 import tablesHTML from "../src/components/tables.html?raw"
@@ -13,6 +14,7 @@ document.body.onload = initialize;
 
 async function initialize(): Promise<void>
 {
+  TableManager.loadStorage();
 
   await tryUpdateCache();
 
@@ -26,11 +28,10 @@ async function initialize(): Promise<void>
     ${tablesHTML}
   `;
 
-  //console.log(await HttpService.deleteEntry('1', CategoryID.IPlayers, "players"));
-
   createTableModalTeams();
 
   listenForTableModal();
+  listenForTableChange();
 }
 
 async function tryUpdateCache(): Promise<void>
@@ -63,11 +64,27 @@ function listenForTableModal(): void
     ev.preventDefault();
 
     const data: FormData = new FormData(form);
+    let tableName = data.get("tableName")!.toString();
+    let teams: string[] = [];
 
-    console.log(Array.from(data.values()));
+    Array.from(data.entries()).forEach(([key, value]) =>
+    {
+      if (key.includes("csapat_id"))
+        teams.push(value.toString());
+    });
+
+    TableManager.addTable(tableName, teams);
 
     form.reset();
 
+  });
+}
+
+function listenForTableChange(): void
+{
+  window.addEventListener("tableschanged", () =>
+  {
+    
   });
 }
 
@@ -99,6 +116,7 @@ function createTeamInput(team: HttpInterfaces.ITeam): HTMLElement
   checkbox.className = "form-check-input";
   checkbox.type = "checkbox";
   checkbox.id = checkboxID;
+  checkbox.name = checkboxID;
   checkbox.value = teamIDValue;
 
   parent.appendChild(checkbox);

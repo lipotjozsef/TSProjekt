@@ -4,7 +4,7 @@ import type { IIdentifiable } from "./IIdentifiable.ts"
 export interface IPlayer extends IIdentifiable
 {
 
-    id: number | undefined,
+    id: string | undefined,
     teamID: string,
     name: string,
     goals: number,

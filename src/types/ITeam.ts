@@ -3,7 +3,7 @@ import type { IIdentifiable } from "./IIdentifiable.ts"
 export interface ITeam extends IIdentifiable
 {
 
-    id: number | undefined,
+    id: string | undefined,
     name: string,
     points: number,
     played: number,

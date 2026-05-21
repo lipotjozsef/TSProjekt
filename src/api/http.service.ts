@@ -9,14 +9,14 @@ export enum CategoryID
 
 export abstract class HttpService
 {
-    private static cache: Map<number, Map<number, object>> = new Map<number, Map<number, object>>();
+    private static cache: Map<number, Map<string, object>> = new Map<number, Map<string, object>>();
     static APIURL: string = "http://localhost:3000/";
 
     private static eventCacheChange: CustomEvent = new CustomEvent("cachechanged");
 
     static callCacheChanged: Function = () => { window.dispatchEvent(this.eventCacheChange) };
 
-    private static getValues<T>(objectMap: Map<number, object> | undefined): readonly T[]
+    private static getValues<T>(objectMap: Map<string, object> | undefined): readonly T[]
     {
         if (!objectMap)
             return [];
@@ -53,21 +53,21 @@ export abstract class HttpService
             throw new APIErrors.ErrorCacheFailed("A csapatok lekérésében hiba lépett fel!");
 
         {
-            let playersMap = new Map<number, IPlayer>();
+            let playersMap = new Map<string, IPlayer>();
             players.forEach(player =>
             {
                 if (player.id)
-                playersMap.set(player.id, player);
+                    playersMap.set(player.id, player);
             });
             this.cache.set(CategoryID.IPlayers, playersMap);
         }
 
         {
-            let teamsMap = new Map<number, ITeam>();
+            let teamsMap = new Map<string, ITeam>();
             teams.forEach((team: ITeam) =>
             {
                 if (team.id)
-                teamsMap.set(team.id, team);
+                    teamsMap.set(team.id, team);
             })
             this.cache.set(CategoryID.ITeams, teamsMap);
         }
@@ -115,12 +115,13 @@ export abstract class HttpService
         return objects;
     }
 
-    private static getSubCacheMap<T>(valueID: number, categoryID: CategoryID, ignoreCheck: boolean = false): Map<number, T> | undefined
+    private static getSubCacheMap<T>(valueID: string, categoryID: CategoryID, ignoreCheck: boolean = false): Map<string, T> | undefined
     {
-        let subMap: Map<number, T>;
+        let subMap: Map<string, T>;
         if (this.cache.has(categoryID))
         {
-            subMap = this.cache.get(categoryID)! as Map<number, T>;
+            subMap = this.cache.get(categoryID)! as Map<string, T>;
+            console.log(Array.from(subMap.keys()));
             if (!subMap.has(valueID) && !ignoreCheck)
                 return undefined;
         }
@@ -156,7 +157,7 @@ export abstract class HttpService
 
         if (newObject && newObject.id)
         {
-            const subMap: Map<number, T> | undefined = this.getSubCacheMap<T>(newObject.id, categoryID, true);
+            const subMap: Map<string, T> | undefined = this.getSubCacheMap<T>(newObject.id, categoryID, true);
             if (!subMap)
                 throw new Error("A json-server által adott új objektum hibás!");
             subMap.set(newObject.id, newObject);
@@ -166,10 +167,10 @@ export abstract class HttpService
         return newObject;
     }
 
-    static async updateEntry<T extends IIdentifiable>(oldValue: T, newValue: T, valueID: number, categoryID: CategoryID, endPointRealtivePath: string): Promise<boolean>
+    static async updateEntry<T extends IIdentifiable>(oldValue: T, newValue: T, valueID: string, categoryID: CategoryID, endPointRealtivePath: string): Promise<boolean>
     {
 
-        const subMap: Map<number, T> | undefined = this.getSubCacheMap<T>(valueID, categoryID);
+        const subMap: Map<string, T> | undefined = this.getSubCacheMap<T>(valueID, categoryID);
         if (!subMap)
             return false;
 
@@ -215,9 +216,9 @@ export abstract class HttpService
         return status;
     }
 
-    static async deleteEntry(valueID: number, categoryID: CategoryID, endPointRealtivePath: string): Promise<boolean>
+    static async deleteEntry(valueID: string, categoryID: CategoryID, endPointRealtivePath: string): Promise<boolean>
     {
-        const subMap: Map<number, object> | undefined = this.getSubCacheMap<object>(valueID, categoryID);
+        const subMap: Map<string, object> | undefined = this.getSubCacheMap<object>(valueID, categoryID);
         if (!subMap)
             return false;
 

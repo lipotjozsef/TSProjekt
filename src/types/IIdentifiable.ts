@@ -1,4 +1,4 @@
 export interface IIdentifiable
 {
-    id: number | undefined
+    id: string | undefined
 }

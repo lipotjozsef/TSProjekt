@@ -15,7 +15,7 @@ async function initialize(): Promise<void>
   
 
 
-  displayPlayers();
+  await displayPlayers();
 
 
 
@@ -31,6 +31,8 @@ async function initialize(): Promise<void>
   window.addEventListener("cachechanged", () => {
     displayPlayers();
   });
+
+  listenForUpdatePlayer();
 
 }
 
@@ -85,7 +87,7 @@ async function displayPlayers() {
     <td>${getTeamById(p.teamID)}</td>
     <td>${p.position}</td>
     <td>
-    <button class = 'btn btn-update' data-id=${p.id}>Szerkesztés</button>
+    <button class = 'btn btn-update' data-id=${p.id} data-bs-toggle='modal' data-bs-target='#updateModal'>Szerkesztés</button>
     <button class = 'btn btn-delete' data-id=${p.id}>Törlés</button>
     </td>
     `;
@@ -96,7 +98,7 @@ async function displayPlayers() {
 
   document.querySelector("#playersTable")?.addEventListener("click", async (e) => {
     let btn = e.target as HTMLButtonElement;
-    let id = Number.parseInt(btn.dataset.id!);
+    let id = btn.dataset.id!;
     if(btn.classList.contains("btn-delete")){
       console.log(id);
       
@@ -117,3 +119,19 @@ function getTeamById(id: string) : string{
   });
   return return_val;
 }
+function listenForUpdatePlayer() {
+  let form = document.querySelector<HTMLFormElement>("#adatok");
+  if(!form){
+    console.log("GATYA");
+    
+    return;
+  }
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+    form.reset();
+    console.log(Array.from(data.entries()));
+    
+  })
+}
+

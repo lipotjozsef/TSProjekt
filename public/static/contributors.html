@@ -6,74 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Közremükődők</title>
     <link rel="shortcut icon" href="../ico_sports.png" type="image/x-icon">
-    <style>
-        * {
-            font-family: monospace;
-            font-size: 18px;
-        }
-
-        :root {
-            /* colors from - https://brand.github.com/foundations/color */
-            --cool-gray: #F2F5F3;
-            --process-black: #0f1210;
-            --github-green: #0FBF3E;
-
-            --base-color: var(--process-black);
-            --text-color: var(--cool-gray);
-        }
-
-        body {
-            padding-top: 2em;
-            max-width: 75vh;
-            min-width: 50vh;
-            margin: 0 auto;
-
-            background-color: var(--base-color);
-            color: var(--text-color);
-        }
-
-        ul {
-            list-style-type: none;
-        }
-
-        li {
-            padding-bottom: 8px;
-        }
-
-        a {
-            color: var(--github-green);
-        }
-
-        a:hover {
-            filter: brightness(0.8);
-        }
-
-        a:visited {
-            color: pink;
-        }
-
-        footer {
-            text-align: center;
-        }
-
-        @media only screen and (max-width: 768px) and (orientation: portrait) {
-            * {
-                font-size: 12px;
-            }
-
-            body {
-                max-width: 50vh;
-                min-width: 25vh;
-            }
-
-            li {
-                padding-bottom: 20px;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-                overflow: hidden;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="../styles/contributors.css">
 </head>
 
 <body>
@@ -90,38 +23,7 @@
         <a href="/" target="_self">Főoldal</a>
     </footer>
 
-    <script>
-
-        ulElement = document.querySelector("#link-list");
-
-        const contributors = [
-            ["lipotjozsef", "https://github.com/lipotjozsef"],
-            ["PinterGabor7", "https://github.com/PinterGabor7"],
-            ["PopDavid", "https://github.com/PopDavid"]
-        ]
-
-
-        document.body.onload = main;
-
-        function main() {
-            if (!ulElement) return;
-            fillUpLinks();
-        }
-
-        function fillUpLinks() {
-            contributors.forEach(([name, link], index) => {
-                const newItemElement = document.createElement("li");
-
-                let showIndex = index + 1;
-                let linkHTML = `<a href="${link}" target="_blank">\t${link}</a>`;
-                newItemElement.innerHTML = `[${showIndex}] ${name}\t- ${linkHTML}`;
-
-                ulElement.appendChild(newItemElement);
-            })
-        }
-
-
-    </script>
+    <script src="../scripts/contributors.js"></script>
 </body>
 
 </html>

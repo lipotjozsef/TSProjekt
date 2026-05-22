@@ -39,24 +39,24 @@ export function simulateMatch(teamA: HttpInterfaces.ITeam, teamB: HttpInterfaces
     teamA.played++;
     teamB.played++;
 
-    console.log(`\n⚽ MECCS: ${teamA.name} vs ${teamB.name}`);
+    //console.log(`\n⚽ MECCS: ${teamA.name} vs ${teamB.name}`);
 
     if (Math.abs(finalScoreA - finalScoreB) < 5) {
         teamA.draws++;
         teamB.draws++;
         teamA.points += 1;
         teamB.points += 1;
-        console.log(`Végeredmény: Döntetlen!`);
+        //console.log(`Végeredmény: Döntetlen!`);
     } else if (finalScoreA > finalScoreB) {
         teamA.wins++;
         teamA.points += 3;
         teamB.loses++;
-        console.log(`Végeredmény: ${teamA.name} nyert!`);
+        //console.log(`Végeredmény: ${teamA.name} nyert!`);
     } else {
         teamB.wins++;
         teamB.points += 3;
         teamA.loses++;
-        console.log(`Végeredmény: ${teamB.name} nyert!`);
+        //console.log(`Végeredmény: ${teamB.name} nyert!`);
     }
 
     return [
@@ -91,7 +91,7 @@ function createSnapshot(initialTeam: HttpInterfaces.ITeam, updatedTeam: HttpInte
         loses: updatedTeam.loses - initialTeam.loses
     } as HttpInterfaces.ITeam;
 
-    console.log(updatedTeam.points - initialTeam.points, updatedTeam.points, initialTeam.points);
+    //console.log(updatedTeam.points - initialTeam.points, updatedTeam.points, initialTeam.points);
 
     return snapshot;
 }
@@ -109,7 +109,7 @@ function distributeGoalsToPlayers(totalGoals: number, players: HttpInterfaces.IP
             randomWeight -= player.skill;
             if (randomWeight <= 0) {
                 player.goals++;
-                console.log(`GÓL! ${player.name} (${player.position}) betalált.`);
+                //console.log(`GÓL! ${player.name} (${player.position}) betalált.`);
                 break;
             }
         }

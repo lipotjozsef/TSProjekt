@@ -178,8 +178,6 @@ function listenForDetailModal()
           current.draws  -= tableData.teamResults.get(Number(oldTeam.id))!.draws;
           current.loses  -= tableData.teamResults.get(Number(oldTeam.id))!.loses;
         }
-
-        console.log(current);
       });
 
       snapshot.players.forEach((oldPlayer: HttpInterfaces.IPlayer) => {

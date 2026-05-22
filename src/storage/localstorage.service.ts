@@ -1,4 +1,5 @@
 import type { ITable } from "../types/ITable";
+import type { ITeam } from "../types/ITeam";
 
 export abstract class TableManager
 {
@@ -28,6 +29,12 @@ export abstract class TableManager
         return tablesValue;
     }
 
+    static getTable(teamIndex: number): ITable
+    {
+        const table = this.tables[teamIndex];
+        return table;
+    }
+
     static saveStorage(): void
     {
 
@@ -55,16 +62,17 @@ export abstract class TableManager
         TableManager.CallTablesEvent();
     }
 
-    static addTable(tableName: string, teams: string[]): void
+    static addTable(tableName: string, teams: string[]): ITable
     {
         const newTable: ITable = {
             name: tableName,
-            teams: teams
-        } as ITable;
+            teams: teams,
+            teamResults: new Map<number, ITeam>()
+        };
 
         TableManager.tables.push(newTable);
 
-        TableManager.saveStorage();
+        return newTable;
     }
 
     static deleteTable(tableID: number): void

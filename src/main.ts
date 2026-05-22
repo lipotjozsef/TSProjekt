@@ -1,6 +1,6 @@
-import './styles/style.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
+import './styles/style.css'
 
 import { HttpService } from './api/http.service'
 

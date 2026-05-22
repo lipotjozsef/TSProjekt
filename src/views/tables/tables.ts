@@ -8,6 +8,8 @@ import * as Simulation from './simulation.ts';
 let application: HTMLElement;
 
 import tableModal from './tablemodal.html?raw';
+import emptyTables from './empty.html?raw';
+import tableFT from './table.html?raw';
 
 export interface ElementOptions {
     name: string;
@@ -228,12 +230,12 @@ function listenForTableChange(): void
 
     if (TableManager.getTablesLength == 0)
     {
-      parentrow.innerHTML =
-      `
-        <p class="fst-italic">Jelenleg nincsen egy tabella sem felvéle...</p>
-      `;
+      parentrow.innerHTML = emptyTables;
+      return;
     }
 
+    parentrow.innerHTML = tableFT;
+    const tbody = parentrow.querySelector<HTMLTableElement>("#tables-body");
     TableManager.getTables.forEach((table: ITable, tableIndex: number) =>
     {
       const parentrow = createElement<HTMLElement>(
@@ -244,19 +246,23 @@ function listenForTableChange(): void
         } as ElementOptions
       );
 
-      parentrow.innerHTML =
+      if (!tbody)
+        return;
+
+      tbody.innerHTML +=
       `
-        <div class="col-6">
-          <p>${table.name}</p>
-        </div>
-        <div class="col-6 text-end">
-          <button type="button" class="btn-link text-decoration-underline text-primary" data-bs-toggle="modal" data-bs-target="#details-model">
-            Részletek
-          </button>
-        </div>
+        <tr>
+          <td>${(tableIndex+1).toString().padStart(2, '0')}</td>
+          <td>${table.name}</td>
+          <td>
+            <button type="button" class="btn-link text-decoration-underline text-primary" data-bs-toggle="modal" data-bs-target="#details-model">
+              Részletek
+            </button>
+          </td>
+        </tr>
       `;
 
-      parentrow.querySelector<HTMLButtonElement>(".btn-link")?.addEventListener("click", () =>
+      tbody.querySelector<HTMLButtonElement>(".btn-link")?.addEventListener("click", () =>
       {
           const tableHiddenInput = application.querySelector<HTMLInputElement>("#view-table-id");
           if (!tableHiddenInput)
@@ -289,7 +295,7 @@ function fillDetailModal(tableIndex: string): void
   modalBody.innerHTML = `
     <div class="table-detail-container">
       <h3>Bajnoki Tabella - ${(index+1).toString().padStart(2, '0')}. csoport</h3>
-      <table class="leaderboard-table" style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+      <table class="w-100 my-3 table table-responsive table-dark">
         <thead>
           <tr class=border-bottom border-3 border-secondary bg-secondary text-start">
             <th class="mb-3">#</th>

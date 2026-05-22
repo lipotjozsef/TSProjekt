@@ -11,10 +11,15 @@ function getTeamPower(teamID: string) {
     return totalSkill / teamPlayers.length;
 }
 
-export function simulateMatch(teamA: HttpInterfaces.ITeam, teamB: HttpInterfaces.ITeam)
+export function simulateMatch(teamA: HttpInterfaces.ITeam, teamB: HttpInterfaces.ITeam, playersA: HttpInterfaces.IPlayer[], playersB: HttpInterfaces.IPlayer[]): [HttpInterfaces.ITeam, HttpInterfaces.ITeam]
 {
     if (!teamA.id || !teamB.id)
-        return;
+        return [{} as HttpInterfaces.ITeam, {} as HttpInterfaces.ITeam];
+
+    const inital: HttpInterfaces.ITeam[] = structuredClone([teamA, teamB]);
+
+    playersA.forEach(p => p.matches++);
+    playersB.forEach(p => p.matches++);
 
     const powerA = getTeamPower(teamA.id);
     const powerB = getTeamPower(teamB.id);
@@ -24,6 +29,12 @@ export function simulateMatch(teamA: HttpInterfaces.ITeam, teamB: HttpInterfaces
 
     const finalScoreA = powerA + luckA;
     const finalScoreB = powerB + luckB;
+
+    const goalsA = Math.max(0, Math.floor(finalScoreA / 15));
+    const goalsB = Math.max(0, Math.floor(finalScoreB / 15));
+
+    distributeGoalsToPlayers(goalsA, playersA);
+    distributeGoalsToPlayers(goalsB, playersB);
 
     teamA.played++;
     teamB.played++;
@@ -46,6 +57,62 @@ export function simulateMatch(teamA: HttpInterfaces.ITeam, teamB: HttpInterfaces
         teamB.points += 3;
         teamA.loses++;
         console.log(`Végeredmény: ${teamB.name} nyert!`);
+    }
+
+    return [
+        createSnapshot(inital[0], teamA),
+        createSnapshot(inital[1], teamB)
+    ];
+}
+
+export function addToResult(snapshot: HttpInterfaces.ITeam, existing: HttpInterfaces.ITeam | undefined): HttpInterfaces.ITeam
+{
+    const existingTeam = existing || { points: 0, played: 0, wins: 0, draws: 0, loses: 0 };
+
+    return {
+      ...snapshot,
+      played: existingTeam.played + (snapshot.played || 0),
+      wins: existingTeam.wins + (snapshot.wins || 0),
+      draws: existingTeam.draws + (snapshot.draws || 0),
+      loses: existingTeam.loses + (snapshot.loses || 0),
+      points: existingTeam.points + (snapshot.points || 0),
+    }
+}
+
+function createSnapshot(initialTeam: HttpInterfaces.ITeam, updatedTeam: HttpInterfaces.ITeam): HttpInterfaces.ITeam
+{
+    const snapshot = {
+        id: initialTeam.id,
+        name: initialTeam.name,
+        points: updatedTeam.points - initialTeam.points,
+        played: updatedTeam.played - initialTeam.played,
+        wins: updatedTeam.wins - initialTeam.wins,
+        draws: updatedTeam.draws - initialTeam.draws,
+        loses: updatedTeam.loses - initialTeam.loses
+    } as HttpInterfaces.ITeam;
+
+    console.log(updatedTeam.points - initialTeam.points, updatedTeam.points, initialTeam.points);
+
+    return snapshot;
+}
+
+function distributeGoalsToPlayers(totalGoals: number, players: HttpInterfaces.IPlayer[]) {
+    const outfieldPlayers = players.filter(p => p.position !== "Kapus");
+    
+    if (outfieldPlayers.length === 0) return;
+
+    for (let i = 0; i < totalGoals; i++) {
+        const totalSkill = outfieldPlayers.reduce((sum, p) => sum + p.skill, 0);
+        let randomWeight = Math.random() * totalSkill;
+        
+        for (const player of outfieldPlayers) {
+            randomWeight -= player.skill;
+            if (randomWeight <= 0) {
+                player.goals++;
+                console.log(`GÓL! ${player.name} (${player.position}) betalált.`);
+                break;
+            }
+        }
     }
 }
 

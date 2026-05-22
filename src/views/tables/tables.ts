@@ -81,6 +81,11 @@ function listenForTableModal(): void
     const playingTeams: HttpInterfaces.ITeam[] = HttpService.getTeams.filter(team => teams.includes(team.id ?? '-1'));
     const playingPlayers = HttpService.getPlayers.filter(player => playingTeams.some(team => team.id === player.teamID.toString()));
 
+    table.initialSnapshot = {
+      teams: structuredClone(playingTeams),
+      players: structuredClone(playingPlayers)
+    };
+
     const playerByTeam: Record<string, HttpInterfaces.IPlayer[]> = playingPlayers.reduce((acc, player) => 
     {
       if (!acc[player.teamID])
@@ -108,7 +113,7 @@ function listenForTableModal(): void
         );
         
         const existingA = table.teamResults.get(Number(teamA.id));
-        const existingB = table.teamResults.get(Number(teamA.id));
+        const existingB = table.teamResults.get(Number(teamB.id));
 
         if (matchSnapshotA.points != undefined || matchSnapshotB.points != undefined)
         {
@@ -118,6 +123,11 @@ function listenForTableModal(): void
       }
     }
 
+    Promise.all([
+    ...playingTeams.map(t => HttpService.putEntry(t, t.id!, CategoryID.ITeams, "teams")),
+    ...playingPlayers.map(p => HttpService.putEntry(p, p.id!, CategoryID.IPlayers, "players"))
+    ])//.then(() => console.log("Tabella adatok elmentve"));
+
     if (submitButton)
     {
       submitButton.setAttribute("data-bs-dismiss", "modal");
@@ -126,6 +136,13 @@ function listenForTableModal(): void
     }
 
     TableManager.saveStorage();
+    form.reset();
+  });
+
+  const cancelButton: HTMLButtonElement | null = document.querySelector<HTMLButtonElement>("#btn-modal-cancel");
+
+  cancelButton?.addEventListener("click", (ev) =>
+  {
     form.reset();
   });
 }
@@ -147,8 +164,49 @@ function listenForDetailModal()
       return;
 
     const tableID = Number.parseInt(tableHiddenInput.value);
+    const tableData = TableManager.getTable(tableID);
+    
+    if (tableData && tableData.initialSnapshot) {
+      const snapshot = tableData.initialSnapshot;
+
+      snapshot.teams.forEach((oldTeam: HttpInterfaces.ITeam) => {
+        const current = HttpService.getTeams.find(t => t.id === oldTeam.id);
+        if (current) {
+          current.points -= tableData.teamResults.get(Number(oldTeam.id))!.points;
+          current.played -= tableData.teamResults.get(Number(oldTeam.id))!.played;
+          current.wins   -= tableData.teamResults.get(Number(oldTeam.id))!.wins;
+          current.draws  -= tableData.teamResults.get(Number(oldTeam.id))!.draws;
+          current.loses  -= tableData.teamResults.get(Number(oldTeam.id))!.loses;
+        }
+
+        console.log(current);
+      });
+
+      snapshot.players.forEach((oldPlayer: HttpInterfaces.IPlayer) => {
+        const current = HttpService.getPlayers.find(p => p.id === oldPlayer.id);
+        if (current && tableData.teamResults.has(Number(oldPlayer.teamID))) {
+          const goalsGained = current.goals - oldPlayer.goals;
+          const matchesGained = current.matches - oldPlayer.matches;
+          
+          current.goals -= Math.max(0, goalsGained);
+          current.matches -= Math.max(0, matchesGained);
+        }
+      });
+
+      const playingTeamIDs = Array.from(tableData.teamResults.keys()).map(id => id.toString());
+      
+      const serverTeamsToUpdate = HttpService.getTeams.filter(t => playingTeamIDs.includes(t.id ?? ''));
+      const serverPlayersToUpdate = HttpService.getPlayers.filter(p => playingTeamIDs.includes(p.teamID.toString()));
+
+      Promise.all([
+        ...serverTeamsToUpdate.map(t => HttpService.putEntry(t, t.id!, CategoryID.ITeams, "teams")),
+        ...serverPlayersToUpdate.map(p => HttpService.putEntry(p, p.id!, CategoryID.IPlayers, "players"))
+      ])//.then(() => console.log("Adatok levonva!"));
+    }
 
     TableManager.deleteTable(tableID);
+    TableManager.saveStorage();
+
     tableHiddenInput.value = '-1';
   });
 }
@@ -294,7 +352,7 @@ function createTeamInput(team: HttpInterfaces.ITeam): HTMLElement
   const teamIDValue: string = team.id!.toString();
   const checkboxID: string = `csapat_id`;
 
-  const teamCheckbox: HTMLInputElement = createElement<HTMLInputElement>(
+  createElement<HTMLInputElement>(
     {
       name: "input",
       className: "form-check-input",
@@ -308,7 +366,7 @@ function createTeamInput(team: HttpInterfaces.ITeam): HTMLElement
     } as ElementOptions
   )
 
-  const teamLabel: HTMLLabelElement = createElement<HTMLLabelElement>(
+  createElement<HTMLLabelElement>(
     {
       name: "label",
       className: "form-check-label",

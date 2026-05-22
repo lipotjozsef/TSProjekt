@@ -10,7 +10,7 @@ export enum CategoryID
 export abstract class HttpService
 {
     private static cache: Map<number, Map<string, object>> = new Map<number, Map<string, object>>();
-    static APIURL: string = "http://localhost:3000/";
+    static APIURL: string = "http://localhost:4512/";
 
     private static eventCacheChange: CustomEvent = new CustomEvent("cachechanged");
 

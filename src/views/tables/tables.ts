@@ -3,6 +3,8 @@ import type { ITable } from "../../types/ITable";
 import { HttpService, CategoryID } from '../../api/http.service'
 import * as HttpInterfaces from '../../types/TSTypes'
 
+import * as Simulation from './simulation.ts';
+
 let application: HTMLElement;
 
 import tableModal from './tablemodal.html?raw';
@@ -72,9 +74,22 @@ function listenForTableModal(): void
       return;
     }
 
-    TableManager.addTable(tableName, teams);
+    const table = TableManager.addTable(tableName, teams);
 
     const submitButton = application.querySelector<HTMLButtonElement>("#btn-modal-submit");
+
+    const playingTeams: HttpInterfaces.ITeam[] = HttpService.getTeams.filter(team => teams.includes(team.id ?? '-1'));
+
+    for (let i = 0; i < playingTeams.length; i++) {
+      for (let j = i + 1; j < playingTeams.length; j++) {
+        const teamA = playingTeams[i];
+        const teamB = playingTeams[j];
+
+        Simulation.simulateMatch(teamA, teamB);
+        table.teamResults.set(Number(teamA.id), teamA);
+        table.teamResults.set(Number(teamB.id), teamB);
+      }
+    }
 
     if (submitButton)
     {
@@ -83,6 +98,7 @@ function listenForTableModal(): void
       submitButton.setAttribute("data-bs-dismiss", "");
     }
 
+    TableManager.saveStorage();
     form.reset();
   });
 }
@@ -94,16 +110,18 @@ function listenForDetailModal()
   if (!deleteButton)
     return;
 
+  const tableHiddenInput = application.querySelector<HTMLInputElement>("#view-table-id");
+  if (!tableHiddenInput)
+    return;
+
   deleteButton.addEventListener("click", () =>
   {
-    const tableHiddenInput = application.querySelector<HTMLInputElement>("#view-table-id");
-    if (!tableHiddenInput)
+    if (!confirm('Biztosan végleg törli ezt a tabellát?'))
       return;
 
     const tableID = Number.parseInt(tableHiddenInput.value);
 
     TableManager.deleteTable(tableID);
-
     tableHiddenInput.value = '-1';
   });
 }
@@ -163,10 +181,65 @@ function listenForTableChange(): void
           if (!tableHiddenInput)
             return;
           tableHiddenInput.value = tableIndex.toString();
+
+          fillDetailModal(tableHiddenInput.value);
       });
     }
     )
   });
+}
+
+function fillDetailModal(tableIndex: string): void
+{
+  const modalBody = application.querySelector("#detail-body");
+  if (!modalBody)
+    return;
+
+  modalBody.innerHTML = '';
+
+  const index = Number.parseInt(tableIndex)
+  const table: ITable = TableManager.getTable(index);
+  const teams = table.teamResults;
+
+  let leaderboard: HttpInterfaces.ITeam[] = [];
+  if (teams)
+    leaderboard = [...teams.values()].sort((a, b) => b.points - a.points);
+
+  // HTML táblázat generálása a meglévő adatokkal
+  modalBody.innerHTML = `
+    <div class="table-detail-container">
+      <h3>Bajnoki Tabella - ${(index+1).toString().padStart(2, '0')}. csoport</h3>
+      <table class="leaderboard-table" style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+        <thead>
+          <tr style="border-bottom: 2px solid #ccc; text-align: left;">
+            <th style="padding: 8px;">#</th>
+            <th style="padding: 8px;">Csapat</th>
+            <th style="padding: 8px; text-align: center;">M</th>
+            <th style="padding: 8px; text-align: center;">Gy</th>
+            <th style="padding: 8px; text-align: center;">D</th>
+            <th style="padding: 8px; text-align: center;">V</th>
+            <th style="padding: 8px; text-align: center;">PT</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${leaderboard.map((entry, index) => {
+            const team = entry; // A csapat adatai a meglévő modell szerint
+            return `
+              <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 8px; font-weight: bold;">${index + 1}.</td>
+                <td style="padding: 8px;">${team.name}</td>
+                <td style="padding: 8px; text-align: center;">${team.played}</td>
+                <td style="padding: 8px; text-align: center;">${team.wins}</td>
+                <td style="padding: 8px; text-align: center;">${team.draws}</td>
+                <td style="padding: 8px; text-align: center;">${team.loses}</td>
+                <td style="padding: 8px; text-align: center; font-weight: bold;">${team.points}</td>
+              </tr>
+            `;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
 }
 
 function createTableModalTeams(): void

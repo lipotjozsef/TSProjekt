@@ -35,7 +35,7 @@ export abstract class TableManager
 
             currentRoot[this.TableManagerKey] = { tables: this.tables };
 
-            localStorage.setItem(this.STORAGEKEY, JSON.stringify(currentRoot, (key, value) => {
+            localStorage.setItem(this.STORAGEKEY, JSON.stringify(currentRoot, (_, value) => {
                 if (value instanceof Map) {
                     return { _type: 'Map', data: Array.from(value.entries()) };
                 }
@@ -57,7 +57,7 @@ export abstract class TableManager
                 return;
             }
 
-            const currentRoot = JSON.parse(raw, (key, value) => {
+            const currentRoot = JSON.parse(raw, (_, value) => {
                 if (value && value._type === 'Map') {
                 return new Map(value.data);
                 }
@@ -68,12 +68,12 @@ export abstract class TableManager
             if (container && Array.isArray(container.tables))
             {
                 this.tables = container.tables;
-                this.CallTablesEvent();
             }
             else
             {
                 this.tables = [];
             }
+            this.CallTablesEvent();
         }
         catch (error)
         {
@@ -86,11 +86,11 @@ export abstract class TableManager
         const newTable: ITable = {
             name: tableName,
             teams: teams,
-            teamResults: new Map<number, ITeam>()
+            teamResults: new Map<number, ITeam>(),
+            initialSnapshot: {teams: [], players: []}
         };
 
         this.tables.push(newTable);
-        this.saveStorage();
         return newTable;
     }
 
@@ -98,6 +98,5 @@ export abstract class TableManager
         if (tableID < 0 || tableID >= this.tables.length) return;
 
         this.tables.splice(tableID, 1);
-        this.saveStorage();
     }
 }

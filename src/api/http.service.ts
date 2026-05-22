@@ -167,6 +167,42 @@ export abstract class HttpService
         return newObject;
     }
 
+    static async putEntry<T extends IIdentifiable>(newValue: T, valueID: string, categoryID: CategoryID, endPointRealtivePath: string): Promise<boolean>
+    {
+        const subMap: Map<string, T> | undefined = this.getSubCacheMap<T>(valueID, categoryID);
+        if (!subMap)
+            return false;
+
+        if (newValue.id && !subMap.has(newValue.id))
+            return false;
+
+        let myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        let raw = JSON.stringify(newValue);
+
+        let requestOptions: RequestInit = {
+            method: 'PUT',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
+
+        let status: boolean = await fetch(`${this.APIURL}${endPointRealtivePath}\\${valueID}`, requestOptions)
+        .then(response => this.checkEndPoint(response, endPointRealtivePath))
+        .then(_ => true)
+        .catch(error =>
+        {
+            console.log('A PUT kérelemmel hiba történt: ', error);
+            return false;
+        });
+
+        if (newValue.id)
+            subMap.set(newValue.id, newValue);
+
+        return status;
+    }
+
     static async updateEntry<T extends IIdentifiable>(oldValue: T, newValue: T, valueID: string, categoryID: CategoryID, endPointRealtivePath: string): Promise<boolean>
     {
 

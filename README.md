@@ -27,7 +27,7 @@ A projekt futtatásához szükség van a **Node.js** környezetre. Kövesd az al
 
 1.  **Klónozd a tárolót (repository) és lépj be a mappába:**
     ```bash
-    git clone [https://github.com/lipotjozsef/TSProjekt.git](https://github.com/lipotjozsef/TSProjekt.git)
+    git clone https://github.com/lipotjozsef/TSProjekt.git
     cd TSProjekt
     ```
 

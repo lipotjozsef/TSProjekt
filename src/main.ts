@@ -1,8 +1,10 @@
-import './style.css'
+import '/styles/style.css?url'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
 
 import { HttpService } from './api/http.service'
+
+type ViewInit = (appDiv: HTMLElement, callback: Function) => void;
 
 const myApp: HTMLElement | null = document.querySelector("#app");
 
@@ -39,12 +41,18 @@ async function loadView(viewName: string, parent: HTMLElement): Promise<void>
 
     const scriptModule = await import(`./views/${viewName}/${viewName}.ts`);
 
-    await scriptModule.init(myApp, loadView);
+    const initFunction = scriptModule.init as ViewInit;
+    if (initFunction)
+      await initFunction(myApp, loadView);
+    else
+      throw new Error(`A ${viewName}.ts nem exportál egy init(myApp: HTMLElement, callback: Function) function-t!`);
   }
   catch (error)
   {
-    console.error('A nézetet nem sikerült betölteni: ', viewName, error);
-    myApp.innerHTML = '<div class="alert alert-danger">Az oldal betöltése sikertelen volt.</div>';
+    let err = error as Error;
+    console.error('A nézetet nem sikerült betölteni: ', viewName, err);
+    console.error(err.message);
+    myApp.innerHTML = '<div class="alert alert-danger">Az oldal betöltése sikertelen volt. F12 több információért!</div>';
   }
 }
 

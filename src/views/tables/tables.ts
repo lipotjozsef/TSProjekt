@@ -1,4 +1,4 @@
-import { TableManager } from '../../storage/localstorage.service'
+import { TableManager } from '../../storage/tablemanager.service.ts'
 import type { ITable } from "../../types/ITable";
 import { HttpService, CategoryID } from '../../api/http.service'
 import * as HttpInterfaces from '../../types/TSTypes'
@@ -79,15 +79,42 @@ function listenForTableModal(): void
     const submitButton = application.querySelector<HTMLButtonElement>("#btn-modal-submit");
 
     const playingTeams: HttpInterfaces.ITeam[] = HttpService.getTeams.filter(team => teams.includes(team.id ?? '-1'));
+    const playingPlayers = HttpService.getPlayers.filter(player => playingTeams.some(team => team.id === player.teamID.toString()));
+
+    const playerByTeam: Record<string, HttpInterfaces.IPlayer[]> = playingPlayers.reduce((acc, player) => 
+    {
+      if (!acc[player.teamID])
+      {
+        acc[player.teamID] = [];
+      }
+
+      acc[player.teamID].push(player);
+
+      return acc;
+    }, {} as Record<string, HttpInterfaces.IPlayer[]>)
 
     for (let i = 0; i < playingTeams.length; i++) {
       for (let j = i + 1; j < playingTeams.length; j++) {
         const teamA = playingTeams[i];
         const teamB = playingTeams[j];
+        if (!teamA.id || !teamB.id)
+          continue;
 
-        Simulation.simulateMatch(teamA, teamB);
-        table.teamResults.set(Number(teamA.id), teamA);
-        table.teamResults.set(Number(teamB.id), teamB);
+        const [matchSnapshotA, matchSnapshotB] = Simulation.simulateMatch(
+          teamA, 
+          teamB, 
+          playerByTeam[teamA.id] || [], 
+          playerByTeam[teamB.id] || []
+        );
+        
+        const existingA = table.teamResults.get(Number(teamA.id));
+        const existingB = table.teamResults.get(Number(teamA.id));
+
+        if (matchSnapshotA.points != undefined || matchSnapshotB.points != undefined)
+        {
+          table.teamResults.set(Number(teamA.id), Simulation.addToResult(matchSnapshotA, existingA));
+          table.teamResults.set(Number(teamB.id), Simulation.addToResult(matchSnapshotB, existingB)); 
+        }
       }
     }
 
@@ -132,7 +159,7 @@ function listenForTableChange(): void
   if (!tableContainer)
     return;
 
-  if (TableManager.getTablesLenght == 0)
+  window.addEventListener("tableschanged", () =>
   {
     tableContainer.innerHTML = '';
     const parentrow = createElement<HTMLElement>(
@@ -142,16 +169,14 @@ function listenForTableChange(): void
         parent: tableContainer
       } as ElementOptions
     );
-    parentrow.innerHTML =
-    `
-      <p class="fst-italic">Jelenleg nincsen egy tabella sem felvéle...</p>
-    `;
-  }
 
-  window.addEventListener("tableschanged", () =>
-  {
-
-    tableContainer.innerHTML = '';
+    if (TableManager.getTablesLength == 0)
+    {
+      parentrow.innerHTML =
+      `
+        <p class="fst-italic">Jelenleg nincsen egy tabella sem felvéle...</p>
+      `;
+    }
 
     TableManager.getTables.forEach((table: ITable, tableIndex: number) =>
     {
@@ -205,34 +230,33 @@ function fillDetailModal(tableIndex: string): void
   if (teams)
     leaderboard = [...teams.values()].sort((a, b) => b.points - a.points);
 
-  // HTML táblázat generálása a meglévő adatokkal
   modalBody.innerHTML = `
     <div class="table-detail-container">
       <h3>Bajnoki Tabella - ${(index+1).toString().padStart(2, '0')}. csoport</h3>
       <table class="leaderboard-table" style="width: 100%; border-collapse: collapse; margin-top: 10px;">
         <thead>
-          <tr style="border-bottom: 2px solid #ccc; text-align: left;">
-            <th style="padding: 8px;">#</th>
-            <th style="padding: 8px;">Csapat</th>
-            <th style="padding: 8px; text-align: center;">M</th>
-            <th style="padding: 8px; text-align: center;">Gy</th>
-            <th style="padding: 8px; text-align: center;">D</th>
-            <th style="padding: 8px; text-align: center;">V</th>
-            <th style="padding: 8px; text-align: center;">PT</th>
+          <tr class=border-bottom border-3 border-secondary bg-secondary text-start">
+            <th class="mb-3">#</th>
+            <th class="mb-3">Csapat</th>
+            <th class="mb-3 text-center">M</th>
+            <th class="mb-3 text-center">Gy</th>
+            <th class="mb-3 text-center">D</th>
+            <th class="mb-3 text-center">V</th>
+            <th class="mb-3 text-center">PT</th>
           </tr>
         </thead>
         <tbody>
           ${leaderboard.map((entry, index) => {
-            const team = entry; // A csapat adatai a meglévő modell szerint
+            const team = entry;
             return `
-              <tr style="border-bottom: 1px solid #eee;">
-                <td style="padding: 8px; font-weight: bold;">${index + 1}.</td>
-                <td style="padding: 8px;">${team.name}</td>
-                <td style="padding: 8px; text-align: center;">${team.played}</td>
-                <td style="padding: 8px; text-align: center;">${team.wins}</td>
-                <td style="padding: 8px; text-align: center;">${team.draws}</td>
-                <td style="padding: 8px; text-align: center;">${team.loses}</td>
-                <td style="padding: 8px; text-align: center; font-weight: bold;">${team.points}</td>
+              <tr class="border-bottom">
+                <td class="mb-3 fw-bold">${index + 1}.</td>
+                <td class="mb-3">${team.name}</td>
+                <td class="mb-3 text-center">${team.played}</td>
+                <td class="mb-3 text-center">${team.wins}</td>
+                <td class="mb-3 text-center">${team.draws}</td>
+                <td class="mb-3 text-center">${team.loses}</td>
+                <td class="mb-3 text-center fw-bold">${team.points}</td>
               </tr>
             `;
           }).join('')}

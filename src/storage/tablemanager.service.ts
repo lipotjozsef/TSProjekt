@@ -13,7 +13,7 @@ export abstract class TableManager
 
     static get getTablesLength(): number
     {
-        return this.tables.length;
+        return this.tables ? this.tables.length : 0;
     }
 
     static get getTables(): readonly ITable[]

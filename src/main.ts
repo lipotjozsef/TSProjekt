@@ -19,7 +19,6 @@ async function initialize(): Promise<void>
   }
 
   await tryUpdateCache();
-
   const myApp: HTMLElement | null = document.querySelector("#app");
   
   if (!myApp)

@@ -56,7 +56,7 @@ async function loadView(viewName: string, parent: HTMLElement): Promise<boolean>
     myApp.className = 'p-3';
     myApp.innerHTML = `
     <div class="alert alert-danger">Az oldal betöltése sikertelen volt. F12 több információért!</div>
-    <button class="btn btn-outline-secondary d-block mx-auto">Újratöltés</button>`;
+    <button class="btn btn-outline-warning d-block mx-auto">Újratöltés</button>`;
 
     myApp.querySelector<HTMLButtonElement>(".btn")!.onclick = () => {location.reload()};
     return false;

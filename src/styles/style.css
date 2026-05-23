@@ -11,6 +11,12 @@ body
   transition: 1.5s;
 }
 
+#team-body, #detail-table
+{
+  max-height: 200px;
+  overflow-y: auto;
+}
+
 #app .position-absolute
 {
   height: 80vh;

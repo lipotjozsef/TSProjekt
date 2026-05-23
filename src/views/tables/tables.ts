@@ -32,8 +32,9 @@ export function init(parent: HTMLElement, _: Function)
   loadTableModal();
   createTableModalTeams();
 
-  listenForTableModal();
   listenForDetailModal();
+
+  listenForTableModal();
 }
 
 function loadTableModal()
@@ -45,6 +46,7 @@ function loadTableModal()
         return;
 
     modalTitle.innerText = "Tabella Kreáló"
+    modalTitle.classList = "fw-bold text-decoration-underline p-1";
     modalBody.innerHTML = tableModal;
 }
 
@@ -238,31 +240,27 @@ function listenForTableChange(): void
     const tbody = parentrow.querySelector<HTMLTableElement>("#tables-body");
     TableManager.getTables.forEach((table: ITable, tableIndex: number) =>
     {
-      const parentrow = createElement<HTMLElement>(
-        {
-          name: "div",
-          className: "row",
-          parent: tableContainer
-        } as ElementOptions
-      );
 
       if (!tbody)
         return;
 
-      tbody.innerHTML +=
-      `
-        <tr>
-          <td>${(tableIndex+1).toString().padStart(2, '0')}</td>
-          <td>${table.name}</td>
-          <td>
-            <button type="button" class="btn-link text-decoration-underline text-primary" data-bs-toggle="modal" data-bs-target="#details-model">
-              Részletek
-            </button>
-          </td>
-        </tr>
-      `;
+      const btnID = `btn-detail-${tableIndex}`;
 
-      tbody.querySelector<HTMLButtonElement>(".btn-link")?.addEventListener("click", () =>
+      const tr: HTMLTableRowElement = document.createElement("tr");
+      tbody.appendChild(tr);
+
+      tr.innerHTML = `
+      <td>${(tableIndex+1).toString().padStart(2, '0')}</td>
+      <td>${table.name}</td>
+      <td>
+        <button type="button" id="${btnID}" class="btn-link text-decoration-underline text-primary" data-bs-toggle="modal" data-bs-target="#details-model">
+        Részletek
+        </button>
+      </td>
+      `
+
+      console.log(tbody.querySelector<HTMLButtonElement>("#".concat(btnID)))
+      tbody.querySelector<HTMLButtonElement>("#".concat(btnID))!.addEventListener("click", () =>
       {
           const tableHiddenInput = application.querySelector<HTMLInputElement>("#view-table-id");
           if (!tableHiddenInput)
@@ -294,8 +292,8 @@ function fillDetailModal(tableIndex: string): void
 
   modalBody.innerHTML = `
     <div class="table-detail-container">
-      <h3>Bajnoki Tabella - ${(index+1).toString().padStart(2, '0')}. csoport</h3>
-      <table class="w-100 my-3 table table-responsive table-dark">
+      <h3 class="text-decoration-underline mb-3">Bajnoki Tabella - ${(index+1).toString().padStart(2, '0')}. csoport</h3>
+      <table id="detail-table" class="table table-responsive table-dark">
         <thead>
           <tr class=border-bottom border-3 border-secondary bg-secondary text-start">
             <th class="mb-3">#</th>

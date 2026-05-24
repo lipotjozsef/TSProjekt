@@ -1,4 +1,4 @@
-import { HttpService, CategoryID } from '../../api/http.service'
+import { HttpService } from '../../api/http.service'
 import * as HttpInterfaces from '../../types/TSTypes'
 
 function getTeamPower(teamID: string) {
@@ -39,7 +39,7 @@ export function simulateMatch(teamA: HttpInterfaces.ITeam, teamB: HttpInterfaces
     teamA.played++;
     teamB.played++;
 
-    //console.log(`\n⚽ MECCS: ${teamA.name} vs ${teamB.name}`);
+    //console.log(`\n MECCS: ${teamA.name} vs ${teamB.name}`);
 
     if (Math.abs(finalScoreA - finalScoreB) < 5) {
         teamA.draws++;
@@ -91,8 +91,6 @@ function createSnapshot(initialTeam: HttpInterfaces.ITeam, updatedTeam: HttpInte
         loses: updatedTeam.loses - initialTeam.loses
     } as HttpInterfaces.ITeam;
 
-    //console.log(updatedTeam.points - initialTeam.points, updatedTeam.points, initialTeam.points);
-
     return snapshot;
 }
 
@@ -109,14 +107,8 @@ function distributeGoalsToPlayers(totalGoals: number, players: HttpInterfaces.IP
             randomWeight -= player.skill;
             if (randomWeight <= 0) {
                 player.goals++;
-                //console.log(`GÓL! ${player.name} (${player.position}) betalált.`);
                 break;
             }
         }
     }
-}
-
-function saveResult(): void
-{
-
 }

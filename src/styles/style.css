@@ -1,6 +1,5 @@
 * {
   font-family: 'Arial Narrow', Arial, sans-serif;
-  /* font-size: 14px; */
 }
 
 body
@@ -9,6 +8,10 @@ body
   height: 100vh;
   min-width: 360px;
   transition: 1.5s;
+}
+
+#app main {
+  min-width: 360px;
 }
 
 #team-body, #detail-table
@@ -63,9 +66,3 @@ body
     margin: 0px !important;
   }
 }
-
-/* Asztali eszközök */
-/* @media only screen and (min-width: 1200px)
-{
-  body { --bs-body-bg: #0000FF; }
-} */

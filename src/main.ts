@@ -1,39 +1,60 @@
-import './style.css'
+import '/styles/style.css?url'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
 
-import { HttpService, CategoryID } from './api/http.service'
-import * as HttpInterfaces from './types/TSTypes';
+import { HttpService } from './api/http.service'
+
+type ViewInit = (appDiv: HTMLElement, callback: Function) => void;
+
+const myApp: HTMLElement | null = document.querySelector("#app");
 
 document.body.onload = initialize;
 
 async function initialize(): Promise<void>
 {
+  if (window.location.pathname.includes("static"))
+  {
+    console.log("Statikus oldal! Dinamikus oldal betöltés kihagyása!");
+    return;
+  }
 
   await tryUpdateCache();
-  
-  
-
-
-  await displayPlayers();
-
-
-
-
-
   const myApp: HTMLElement | null = document.querySelector("#app");
   
   if (!myApp)
     throw new Error("Could not find #app div element!");
+  myApp.className =  "bg-light";
   
-  //myApp.className =  "bg-light";
-  
-  window.addEventListener("cachechanged", () => {
-    displayPlayers();
-  });
+  await loadView('main', myApp);
+}
 
-  listenForUpdatePlayer();
+async function loadView(viewName: string, parent: HTMLElement): Promise<void>
+{
+  if (!myApp)
+    return;
 
+  try
+  {
+    const htmlModule = await import(`./views/${viewName}/${viewName}.html?raw`);
+    const htmlContent = htmlModule.default;
+
+    parent.innerHTML = htmlContent;
+
+    const scriptModule = await import(`./views/${viewName}/${viewName}.ts`);
+
+    const initFunction = scriptModule.init as ViewInit;
+    if (initFunction)
+      await initFunction(myApp, loadView);
+    else
+      throw new Error(`A ${viewName}.ts nem exportál egy init(myApp: HTMLElement, callback: Function) function-t!`);
+  }
+  catch (error)
+  {
+    let err = error as Error;
+    console.error('A nézetet nem sikerült betölteni: ', viewName, err);
+    console.error(err.message);
+    myApp.innerHTML = '<div class="alert alert-danger">Az oldal betöltése sikertelen volt. F12 több információért!</div>';
+  }
 }
 
 async function tryUpdateCache(): Promise<void>
@@ -53,85 +74,3 @@ async function tryUpdateCache(): Promise<void>
     alert(myError.message);
   }
 }
-
-async function displayPlayers() {
-
-  const playerHTML = (await import('../src/components/players.html?raw')).default;
-  const myApp: HTMLElement | null = document.querySelector("#app");
-  const tabContent = document.createElement("div");
-  const table = document.createElement("table");
-  table.id = "playersTable"
-  const teams = HttpService.getTeams;
-
-  myApp!.innerHTML = playerHTML;
-
-  tabContent.classList += "tab-content";
-  tabContent.id = "myTabContent";
-
-  table.classList += `table`;
-  table.innerHTML += `
-    <thead>
-        <th>#</th>
-        <th>Név</th>
-        <th>Csapata</th>
-        <th>Pozíció</th>
-        <th>Műveletek</th>
-    </thead>
-  `;
-  HttpService.getPlayers.forEach(p => {
-    
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-    <td>${p.id}</td>
-    <td>${p.name}</td>
-    <td>${getTeamById(p.teamID)}</td>
-    <td>${p.position}</td>
-    <td>
-    <button class = 'btn btn-update' data-id=${p.id} data-bs-toggle='modal' data-bs-target='#updateModal'>Szerkesztés</button>
-    <button class = 'btn btn-delete' data-id=${p.id}>Törlés</button>
-    </td>
-    `;
-    table.appendChild(tr);
-  });
-  tabContent?.appendChild(table);
-  myApp?.appendChild(tabContent);
-
-  document.querySelector("#playersTable")?.addEventListener("click", async (e) => {
-    let btn = e.target as HTMLButtonElement;
-    let id = btn.dataset.id!;
-    if(btn.classList.contains("btn-delete")){
-      console.log(id);
-      
-      console.log(await HttpService.deleteEntry(id, CategoryID.IPlayers, "players"));
-      
-    }
-  });
-
-}
-
-function getTeamById(id: string) : string{
-  let return_val = "Nincs csapata";
-  HttpService.getTeams.forEach(t => {
-    if(t.id?.toString() == id){
-      return_val = t.name;
-    }
-    
-  });
-  return return_val;
-}
-function listenForUpdatePlayer() {
-  let form = document.querySelector<HTMLFormElement>("#adatok");
-  if(!form){
-    console.log("GATYA");
-    
-    return;
-  }
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const data = new FormData(form);
-    form.reset();
-    console.log(Array.from(data.entries()));
-    
-  })
-}
-

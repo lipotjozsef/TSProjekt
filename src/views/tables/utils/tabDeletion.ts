@@ -12,7 +12,7 @@ export function rollBackTabData(data: ITable)
     const resultDelta = teamResults.get(Number(oldTeam.id));
 
     if (currentTeam && resultDelta) {
-      currentTeam.points -= resultDelta.points;
+      currentTeam.points += resultDelta.points;
       currentTeam.played -= resultDelta.played;
       currentTeam.wins   -= resultDelta.wins;
       currentTeam.draws  -= resultDelta.draws;

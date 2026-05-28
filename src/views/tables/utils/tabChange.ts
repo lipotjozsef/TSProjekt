@@ -83,7 +83,7 @@ function fillDetailModal(tableIndex: string, application: HTMLElement): void
 
   let leaderboard: HttpInterfaces.ITeam[] = [];
   if (teams)
-    leaderboard = [...teams.values()].sort((a, b) => b.points - a.points);
+    leaderboard = [...teams.values()].sort((a, b) =>  a.points - b.points);
 
   modalBody.innerHTML = detailModalTabTable;
 
@@ -94,6 +94,26 @@ function fillDetailModal(tableIndex: string, application: HTMLElement): void
   const detailTBody = modalBody.querySelector("#detail-tbody");
   detailTBody!.innerHTML = leaderboard.map((entry, index) => {
     const team = entry;
+
+    let lastFiveMatchesIcons = "";
+    const length = team.matchHistory?.length ?? -1;
+    for(let i = 0; i < 6; i++)
+    {
+      if (i > length)
+        lastFiveMatchesIcons += '<img class="tab-result-ico" src="./images/noinfoIcon.svg" />';
+      else
+      {
+        let currentHistory = team.matchHistory![i];
+        if (currentHistory == "D")
+          lastFiveMatchesIcons += '<img class="tab-result-ico" src="./images/drawIcon.svg" />';
+        else if (currentHistory == "L")
+          lastFiveMatchesIcons += '<img class="tab-result-ico" src="./images/lossIcon.svg" />';
+        else if (currentHistory == "W")
+          lastFiveMatchesIcons += '<img class="tab-result-ico" src="./images/winIcon.svg" />';
+      }
+
+    }
+
     return `
       <tr class="border-bottom">
         <td class="mb-3 fw-bold">${index + 1}.</td>
@@ -102,7 +122,12 @@ function fillDetailModal(tableIndex: string, application: HTMLElement): void
         <td class="mb-3 text-center">${team.wins}</td>
         <td class="mb-3 text-center">${team.draws}</td>
         <td class="mb-3 text-center">${team.loses}</td>
-        <td class="mb-3 text-center fw-bold">${team.points}</td>
+        <td class="mb-3 text-center text-success fw-bold">${Math.abs(team.points)}</td>
+        <td class="text-center align-middle">
+          <div class="d-flex gap-1 justify-content-center align-items-center">
+            ${lastFiveMatchesIcons}
+          </div>
+        </td>
       </tr>`;
   }).join('');
 }

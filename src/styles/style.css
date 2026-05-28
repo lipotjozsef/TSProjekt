@@ -38,6 +38,29 @@ body
   background-clip: text;
 }
 
+.tab-result-ico
+{
+  width: 1em;
+}
+
+.modal-dialog
+{
+  width: 65% !important;
+  max-width: 1200px !important;
+}
+
+#detail-table tr
+{
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.table-detail-container
+{
+    overflow-y: auto;
+    overflow-x: auto;
+}
 
 /* Mobil eszközök */
 @media only screen and (max-width: 460px)
@@ -46,6 +69,17 @@ body
   {
     padding: 5px 3px !important;
   }
+  
+  .modal-dialog
+  {
+    width: 360px !important;
+  }
+  
+  #detail-table
+  {
+    width: 360px !important;
+  }
+
 }
 
 /* Tablet eszközök */

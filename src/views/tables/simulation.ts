@@ -39,6 +39,9 @@ export function simulateMatch(teamA: HttpInterfaces.ITeam, teamB: HttpInterfaces
     teamA.played++;
     teamB.played++;
 
+
+    let resultA: "W" | "D" | "L";
+    let resultB: "W" | "D" | "L";
     //console.log(`\n MECCS: ${teamA.name} vs ${teamB.name}`);
 
     if (Math.abs(finalScoreA - finalScoreB) < 5) {
@@ -46,28 +49,49 @@ export function simulateMatch(teamA: HttpInterfaces.ITeam, teamB: HttpInterfaces
         teamB.draws++;
         teamA.points += 1;
         teamB.points += 1;
+
+        resultA = "D";
+        resultB = "D";
         //console.log(`Végeredmény: Döntetlen!`);
     } else if (finalScoreA > finalScoreB) {
         teamA.wins++;
         teamA.points += 3;
         teamB.loses++;
+
+        resultA = "W";
+        resultB = "L";
         //console.log(`Végeredmény: ${teamA.name} nyert!`);
     } else {
         teamB.wins++;
         teamB.points += 3;
         teamA.loses++;
+
+        resultA = "L";
+        resultB = "W";
         //console.log(`Végeredmény: ${teamB.name} nyert!`);
     }
 
     return [
-        createSnapshot(inital[0], teamA),
-        createSnapshot(inital[1], teamB)
+        createSnapshot(inital[0], teamA, resultA),
+        createSnapshot(inital[1], teamB, resultB)
     ];
 }
 
 export function addToResult(snapshot: HttpInterfaces.ITeam, existing: HttpInterfaces.ITeam | undefined): HttpInterfaces.ITeam
 {
-    const existingTeam = existing || { points: 0, played: 0, wins: 0, draws: 0, loses: 0 };
+    const existingTeam = existing || { points: 0, played: 0, wins: 0, draws: 0, loses: 0, matchHistory: [] };
+
+    const updatedHistory = existingTeam.matchHistory ? [...existingTeam.matchHistory] : [];
+    
+    if (snapshot.matchHistory && snapshot.matchHistory.length > 0) {
+        updatedHistory.push(snapshot.matchHistory[0]);
+    }
+
+    if (updatedHistory.length > 5) {
+        updatedHistory.shift();
+    }
+
+    console.log(snapshot.points);
 
     return {
       ...snapshot,
@@ -75,11 +99,12 @@ export function addToResult(snapshot: HttpInterfaces.ITeam, existing: HttpInterf
       wins: existingTeam.wins + (snapshot.wins || 0),
       draws: existingTeam.draws + (snapshot.draws || 0),
       loses: existingTeam.loses + (snapshot.loses || 0),
-      points: existingTeam.points + (snapshot.points || 0),
+      points: existingTeam.points - snapshot.points, // így működik lol
+      matchHistory: updatedHistory,
     }
 }
 
-function createSnapshot(initialTeam: HttpInterfaces.ITeam, updatedTeam: HttpInterfaces.ITeam): HttpInterfaces.ITeam
+function createSnapshot(initialTeam: HttpInterfaces.ITeam, updatedTeam: HttpInterfaces.ITeam, result: string): HttpInterfaces.ITeam
 {
     const snapshot = {
         id: initialTeam.id,
@@ -88,8 +113,11 @@ function createSnapshot(initialTeam: HttpInterfaces.ITeam, updatedTeam: HttpInte
         played: updatedTeam.played - initialTeam.played,
         wins: updatedTeam.wins - initialTeam.wins,
         draws: updatedTeam.draws - initialTeam.draws,
-        loses: updatedTeam.loses - initialTeam.loses
+        loses: updatedTeam.loses - initialTeam.loses,
+        matchHistory: [result]
     } as HttpInterfaces.ITeam;
+
+    console.log(snapshot);
 
     return snapshot;
 }

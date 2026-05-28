@@ -54,6 +54,7 @@ export abstract class TableManager
             if (!raw)
             {
                 this.tables = [];
+                this.CallTablesEvent();
                 return;
             }
 

@@ -1,4 +1,5 @@
 import { HttpService, CategoryID } from '../../api/http.service'
+import { EPosition } from '../../types/EPosition';
 import * as HttpInterfaces from '../../types/TSTypes'
 
 import playerModal from "./playerModal.html?raw"
@@ -47,8 +48,8 @@ async function displayPlayers() {
 
     HttpService.getPlayers.forEach(p => {
 
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
     <td>${p.id}</td>
     <td>${p.name}</td>
     <td>${getTeamById(p.teamID)}</td>
@@ -65,10 +66,31 @@ async function displayPlayers() {
         let btn = e.target as HTMLButtonElement;
         let id = btn.dataset.id!;
         if (btn.classList.contains("btn-delete")) {
-            console.log(id);
+            if(confirm(`Biztosan törölni szeretnéd a(z) ${id}. játékost?`)){
+                console.log(await HttpService.deleteEntry(id, CategoryID.IPlayers, "players"));
+            }
 
-            console.log(await HttpService.deleteEntry(id, CategoryID.IPlayers, "players"));
+        }else if(btn.classList.contains("btn-update")){
+            let clickedPlayer = getPlayerById(id);
+            
+            //document.querySelector("#updatename")!.ariaValueText = clickedPlayer!.name;
+            
+            (document.querySelector("#name") as HTMLInputElement).value = clickedPlayer!.name;
+            (document.querySelector("#teamID") as HTMLInputElement).value = clickedPlayer!.teamID;
+            (document.querySelector("#goals") as HTMLInputElement).value = clickedPlayer!.goals.toString();
+            (document.querySelector("#matches") as HTMLInputElement).value = clickedPlayer!.matches.toString();
+            (document.querySelector("#skill") as HTMLInputElement).value = clickedPlayer!.skill.toString();
 
+            (Object.entries(EPosition)).forEach(pos => {
+                if(pos[1] == clickedPlayer!.position){
+                    console.log(document.querySelector(`#${pos[0]}`) as HTMLOptionElement);
+                    
+                    (document.querySelector(`#${pos[0]}`) as HTMLOptionElement).selected = true;
+                }
+            });    
+            
+                        
+            
         }
     });
 
@@ -84,6 +106,19 @@ function getTeamById(id: string): string {
     });
     return return_val;
 }
+
+function getPlayerById(id: string): HttpInterfaces.IPlayer | null {
+    let player = null;
+    HttpService.getPlayers.forEach(p => {
+        if (p.id?.toString() == id) {
+            player = p;
+        }
+
+    });
+
+    return player;
+}
+
 function listenForUpdatePlayer() {
     let form = document.querySelector<HTMLFormElement>("#adatok");
     if (!form) {
@@ -91,12 +126,13 @@ function listenForUpdatePlayer() {
 
         return;
     }
+
     form.addEventListener("submit", (e) => {
         e.preventDefault();
         const data = new FormData(form);
         form.reset();
         console.log(Array.from(data.entries()));
 
-    })
+    });
 }
 

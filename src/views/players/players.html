@@ -19,49 +19,48 @@
             <div class="modal-header">
                 <h1 class="fs-5">Játékos szerkesztése</h1>
             </div>
-            <form action="#" id="adatok">
-                <div>
-                    <label for="name" class="form-label">Név: </label>
-                    <input type="text" name="name" class="form-control mb-3">
+        <form action="#" id="adatok" class="p-3">
+          <div>
+            <label for="name" class="form-label">Név: </label>
+            <input id="name" type="text" name="name" class="form-control mb-3">
 
-                    <label for="teamID" class="form-label">Csapat id: </label>
-                    <input type="text" name="teamID" class="form-control mb-3">
+            <label for="teamID" class="form-label">Csapat id: </label>
+            <input id="teamID" type="text" name="teamID" class="form-control mb-3">
 
-                    <label for="goals" class="form-label">Gólok: </label>
-                    <input type="number" name="goals" class="form-control mb-3">
+            <label for="goals" class="form-label">Gólok: </label>
+            <input id="goals" type="number" name="goals" class="form-control mb-3">
 
-                    <label for="matches" class="form-label">Meccsek: </label>
-                    <input type="number" name="matches" class="form-control mb-3">
+            <label for="matches" class="form-label">Meccsek: </label>
+            <input id="matches" type="number" name="matches" class="form-control mb-3">
 
-                    <label for="skill" class="form-label">Skill: </label>
-                    <input type="number" name="skill" class="form-control mb-3">
+            <label for="skill" class="form-label">Skill: </label>
+            <input id="skill" type="number" name="skill" class="form-control mb-3">
 
-                    <label for="position" class="form-label">Pozíció: </label>
-                    <select name="position class=" form-control mb-3">
-                        <option value="GK">Kapus</option>
-                        <option value="CB">Középhátvéd</option>
-                        <option value="LB">Bal hátvéd</option>
-                        <option value="RB">Jobb hátvéd</option>
-                        <option value="LWB">Bal oldali szárnyvédő</option>
-                        <option value="RWB">Jobb oldali szárnyvédő</option>
-                        <option value="DM">Védekező középpályás</option>
-                        <option value="CM">Középső középpályás</option>
-                        <option value="AM">Támadó középpályás</option>
-                        <option value="LM">Bal oldali középpályás</option>
-                        <option value="RM">Jobb oldali középpályás</option>
-                        <option value="LW">Bal szélső támadó</option>
-                        <option value="RW">Jobb szélső támadó</option>
-                        <option value="ST">Csatár</option>
-                        <option value="VD">Védő</option>
-                        <option value="SS">Árnyékék</option>
-                    </select>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Bezár</button>
-                    <button type="submit" class="btn btn-primary">Mentés</button>
-                </div>
-            </form>
+            <label for="position" class="form-label">Pozíció: </label>
+            <select name="position class="form-control mb-3">
+                <option id="GK" value="GK">Kapus</option>
+                <option id="CB" value="CB">Középhátvéd</option>
+                <option id="LB" value="LB">Bal hátvéd</option>
+                <option id="RB" value="RB">Jobb hátvéd</option>
+                <option id="LWB" value="LWB">Bal oldali szárnyvédő</option>
+                <option id="RWB" value="RWB">Jobb oldali szárnyvédő</option>
+                <option id="DM" value="DM">Védekező középpályás</option>
+                <option id="CM" value="CM">Középső középpályás</option>
+                <option id="AM" value="AM">Támadó középpályás</option>
+                <option id="LM" value="LM">Bal oldali középpályás</option>
+                <option id="RM" value="RM">Jobb oldali középpályás</option>
+                <option id="LW" value="LW">Bal szélső támadó</option>
+                <option id="RW" value="RW">Jobb szélső támadó</option>
+                <option id="ST" value="ST">Csatár</option>
+                <option id="VD" value="VD">Védő</option>
+                <option id="SS" value="SS">Árnyékék</option>
+            </select>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Bezár</button>
+            <button type="submit" class="btn btn-primary">Mentés</button>
+          </div>
+      </form>
         </div>
     </div>
 </div>

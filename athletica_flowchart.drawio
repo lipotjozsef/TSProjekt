@@ -1,0 +1,125 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Oldal-1" id="Sv0uq5PuGPmr9OgXicId">
+    <mxGraphModel dx="808" dy="449" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="qPtbIjXEqU1obKghwl15-63" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="" vertex="1">
+          <mxGeometry height="400" width="360" x="810" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="qPtbIjXEqU1obKghwl15-57" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="" vertex="1">
+          <mxGeometry height="850" width="710" x="60" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="qPtbIjXEqU1obKghwl15-3" edge="1" parent="1" source="qPtbIjXEqU1obKghwl15-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="qPtbIjXEqU1obKghwl15-2" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="qPtbIjXEqU1obKghwl15-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;div&gt;Kezdőpont&lt;/div&gt;/&lt;div&gt;Entrypoint:&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="120" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="qPtbIjXEqU1obKghwl15-22" edge="1" parent="1" source="qPtbIjXEqU1obKghwl15-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="qPtbIjXEqU1obKghwl15-20">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="qPtbIjXEqU1obKghwl15-2" parent="1" style="whiteSpace=wrap;html=1;rounded=0;" value="main.ts" vertex="1">
+          <mxGeometry height="60" width="120" x="310" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="qPtbIjXEqU1obKghwl15-28" edge="1" parent="1" source="qPtbIjXEqU1obKghwl15-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="qPtbIjXEqU1obKghwl15-30">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="qPtbIjXEqU1obKghwl15-17" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="initalize()" vertex="1">
+          <mxGeometry height="50" width="90" x="414" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="qPtbIjXEqU1obKghwl15-27" edge="1" parent="1" source="qPtbIjXEqU1obKghwl15-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="qPtbIjXEqU1obKghwl15-17">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="qPtbIjXEqU1obKghwl15-20" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="body.onload()" vertex="1">
+          <mxGeometry height="50" width="90" x="414" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="qPtbIjXEqU1obKghwl15-52" edge="1" parent="1" source="qPtbIjXEqU1obKghwl15-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="qPtbIjXEqU1obKghwl15-37">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="qPtbIjXEqU1obKghwl15-53" edge="1" parent="1" source="qPtbIjXEqU1obKghwl15-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="qPtbIjXEqU1obKghwl15-34">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="qPtbIjXEqU1obKghwl15-54" edge="1" parent="1" source="qPtbIjXEqU1obKghwl15-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="qPtbIjXEqU1obKghwl15-36">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="qPtbIjXEqU1obKghwl15-55" edge="1" parent="1" source="qPtbIjXEqU1obKghwl15-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fillColor=#6a00ff;strokeColor=#3700CC;" target="qPtbIjXEqU1obKghwl15-30">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="538" y="695" />
+              <mxPoint x="538" y="420" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="qPtbIjXEqU1obKghwl15-21" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="loadSubViewLoad()" vertex="1">
+          <mxGeometry height="50" width="116" x="400" y="670" as="geometry" />
+        </mxCell>
+        <mxCell id="qPtbIjXEqU1obKghwl15-38" edge="1" parent="1" source="qPtbIjXEqU1obKghwl15-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="qPtbIjXEqU1obKghwl15-35" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="qPtbIjXEqU1obKghwl15-56" edge="1" parent="1" source="qPtbIjXEqU1obKghwl15-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fillColor=#6a00ff;strokeColor=#3700CC;" target="qPtbIjXEqU1obKghwl15-21">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="380" y="420" />
+              <mxPoint x="380" y="695" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="qPtbIjXEqU1obKghwl15-30" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="load and call View&#39;s Entrypoint" vertex="1">
+          <mxGeometry height="60" width="120" x="398" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="qPtbIjXEqU1obKghwl15-34" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Tables View" vertex="1">
+          <mxGeometry height="60" width="120" x="249" y="780" as="geometry" />
+        </mxCell>
+        <mxCell id="qPtbIjXEqU1obKghwl15-47" edge="1" parent="1" source="qPtbIjXEqU1obKghwl15-35" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="qPtbIjXEqU1obKghwl15-46" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="qPtbIjXEqU1obKghwl15-35" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Main View&lt;br&gt;Entrypoint:" vertex="1">
+          <mxGeometry height="60" width="120" x="398" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="qPtbIjXEqU1obKghwl15-36" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Players View&amp;nbsp;" vertex="1">
+          <mxGeometry height="60" width="120" x="549" y="780" as="geometry" />
+        </mxCell>
+        <mxCell id="qPtbIjXEqU1obKghwl15-37" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Teams View&amp;nbsp;" vertex="1">
+          <mxGeometry height="60" width="120" x="398" y="780" as="geometry" />
+        </mxCell>
+        <mxCell id="qPtbIjXEqU1obKghwl15-51" edge="1" parent="1" source="qPtbIjXEqU1obKghwl15-46" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="qPtbIjXEqU1obKghwl15-21" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="qPtbIjXEqU1obKghwl15-46" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="navClick.onclick()" vertex="1">
+          <mxGeometry height="50" width="106" x="405" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="qPtbIjXEqU1obKghwl15-58" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=20;fontStyle=1" value="Single Page Application (SPA) Flow Chart&lt;br&gt;/&lt;br&gt;SPA Folyamatábra" vertex="1">
+          <mxGeometry height="80" width="670" x="80" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="qPtbIjXEqU1obKghwl15-59" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=#2D7600;fillColor=#60a917;align=center;verticalAlign=middle;rounded=0;fontColor=#ffffff;" value="data-view" vertex="1">
+          <mxGeometry height="30" width="60" x="470" y="620" as="geometry" />
+        </mxCell>
+        <mxCell id="qPtbIjXEqU1obKghwl15-62" parent="1" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;rounded=0;" value="&lt;blockquote style=&quot;margin: 0px 0px 0px 40px; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; padding: 0px;&quot;&gt;&lt;div&gt;/src&lt;/div&gt;&lt;div&gt;├───/api&lt;/div&gt;&lt;div&gt;│&amp;nbsp; &amp;nbsp;└───/APIErrors&lt;/div&gt;&lt;div&gt;│&amp;nbsp; &amp;nbsp;└───http.service.ts&lt;/div&gt;&lt;div&gt;├───/assets&lt;/div&gt;&lt;div&gt;│&amp;nbsp; &amp;nbsp;├───/images&lt;/div&gt;&lt;div&gt;│&amp;nbsp; &amp;nbsp;└───/JSONData&lt;/div&gt;&lt;div&gt;├───/storage&lt;/div&gt;&lt;div&gt;│&amp;nbsp; &amp;nbsp;└───tablemanager.service.ts&lt;/div&gt;&lt;div&gt;│&amp;nbsp; &amp;nbsp;└───tabmanager.service.ts&lt;/div&gt;&lt;div&gt;├───/styles&lt;/div&gt;&lt;div&gt;├───/types&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 102, 102));&quot;&gt;└───/views&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;font&gt;&amp;nbsp; &amp;nbsp; &lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 102, 102));&quot;&gt;├───/main&lt;/font&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 102, 102));&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; ├───main.ts&lt;/font&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 102, 102));&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; └───main.html&lt;/font&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 102, 102));&quot;&gt;&amp;nbsp; &amp;nbsp; └───/tables&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 102, 102));&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; ├───tables.ts&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 102, 102));&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; └───tables.html&lt;/font&gt;&lt;/div&gt;&lt;/blockquote&gt;" vertex="1">
+          <mxGeometry height="300" width="280" x="850" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="qPtbIjXEqU1obKghwl15-64" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=14;fontStyle=1" value="Project&#39;s File Structure&lt;div&gt;/&lt;br&gt;Projekt Fájlszerkezete&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="320" x="830" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="qPtbIjXEqU1obKghwl15-65" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="" vertex="1">
+          <mxGeometry height="520" width="450" x="810" y="460" as="geometry" />
+        </mxCell>
+        <mxCell id="qPtbIjXEqU1obKghwl15-66" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=14;fontStyle=1" value="API Wrapper class / Burkoló osztály" vertex="1">
+          <mxGeometry height="30" width="410" x="830" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="qPtbIjXEqU1obKghwl15-67" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=top;rounded=0;" value="&lt;b&gt;abstract class HttpService:&lt;/b&gt;&lt;div&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;- az abstract tulajdonsága arra szolgál, hogy ne lehessen &lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;példányosítani, vagyis egyfajta statikus osztályként viselkedik&lt;br&gt;&lt;div&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;- a JSON-szerverrel való kommunikációt biztosítja&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;- különféle requesteket metodusokba foglalja, kezeli a letöltött adatokat&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;- Főbb adattagjai:&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;b&gt;private cache: Map&amp;nbsp;&lt;/b&gt;- letöltött adatok tárolója, minden lekért adatot itt &lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;tárol&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;ahelyett, hogy újból a szervertől kérne&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;- Főbb tulajdonságai:&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;b&gt;get getCache(): object&lt;/b&gt; - a privát cache változót adja vissza olvasható &lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;konstansként&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;b&gt;get getPlayers():&lt;/b&gt; readonly IPlayer[] - a letöltött adatok közül adja vissza &lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;olvasható konstansként a játékosokat&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;b&gt;get getTeams():&lt;/b&gt; readonly ITeam[] -&amp;nbsp;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;a letöltött adatok közül adja &lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;vissza&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;olvasható konstansként a csapatokat&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;- Főbb metódusai:&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;b&gt;async submitEntry(): Promise&amp;lt;object | null&amp;gt;&lt;/b&gt; - új adattagot próbál &lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;felvenni, ha sikerrel jár vissza adja az újból kreált adatot, POST&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;b&gt;async putEntry(): Promise&amp;lt;boolean&amp;gt;&lt;/b&gt; - egy, már meglévő, adatot &lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;próbál egészében módosítani, PUT&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;b&gt;async updateEntry(): Promise&amp;lt;boolean&amp;gt;&lt;/b&gt; - egy, már meglévő, adatot &lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;próbál részben módosítani, PATCH&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;b&gt;async deleteEntry(): Promise&amp;lt;boolean&amp;gt;&lt;/b&gt;- egy, már meglévő, adatot &lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;próbál törölni, DELETE&lt;/div&gt;" vertex="1">
+          <mxGeometry height="450" width="413" x="827" y="510" as="geometry" />
+        </mxCell>
+        <mxCell id="qPtbIjXEqU1obKghwl15-68" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="" vertex="1">
+          <mxGeometry height="370" width="620" x="1290" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="qPtbIjXEqU1obKghwl15-69" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontStyle=1" value="Player data model/&lt;div&gt;Játékos adatmodell:&lt;/div&gt;" vertex="1">
+          <mxGeometry height="30" width="550" x="1320" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="qPtbIjXEqU1obKghwl15-71" parent="1" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;rounded=0;labelBackgroundColor=light-dark(#121314,#000000);" value="&lt;div style=&quot;font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; font-size: 14px; line-height: 19px; white-space: pre;&quot;&gt;&lt;font style=&quot;color: light-dark(rgb(201, 209, 217), rgb(255, 255, 255));&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;div style=&quot;color: light-dark(rgb(187, 190, 191), rgb(73, 75, 76));&quot;&gt;&lt;span style=&quot;color: rgb(197, 134, 192);&quot;&gt;export&lt;/span&gt; &lt;span style=&quot;color: rgb(255, 123, 114);&quot;&gt;interface&lt;/span&gt; &lt;span style=&quot;color: rgb(78, 201, 176);&quot;&gt;IPlayer&lt;/span&gt; &lt;span style=&quot;color: rgb(86, 156, 214);&quot;&gt;extends&lt;/span&gt; &lt;span style=&quot;color: rgb(78, 201, 176);&quot;&gt;IIdentifiable&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;color: light-dark(rgb(187, 190, 191), rgb(73, 75, 76));&quot;&gt;{&lt;/div&gt;&lt;font style=&quot;color: light-dark(rgb(201, 209, 217), rgb(255, 255, 255));&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;div style=&quot;&quot;&gt;&lt;font style=&quot;color: light-dark(rgb(201, 209, 217), rgb(255, 255, 255));&quot;&gt;&amp;nbsp; &amp;nbsp; &lt;/font&gt;&lt;span style=&quot;color: rgb(201, 209, 217);&quot;&gt;&lt;font style=&quot;color: light-dark(rgb(201, 209, 217), rgb(255, 255, 255));&quot;&gt;id&lt;/font&gt;&lt;/span&gt;&lt;span style=&quot;color: rgb(212, 212, 212);&quot;&gt;:&lt;/span&gt;&lt;font style=&quot;color: light-dark(rgb(201, 209, 217), rgb(255, 255, 255));&quot;&gt; &lt;/font&gt;&lt;span style=&quot;color: rgb(78, 201, 176);&quot;&gt;string&lt;/span&gt;&lt;font style=&quot;color: light-dark(rgb(201, 209, 217), rgb(255, 255, 255));&quot;&gt; &lt;/font&gt;&lt;span style=&quot;color: rgb(212, 212, 212);&quot;&gt;|&lt;/span&gt;&lt;font style=&quot;color: light-dark(rgb(201, 209, 217), rgb(255, 255, 255));&quot;&gt; &lt;/font&gt;&lt;span style=&quot;color: rgb(78, 201, 176);&quot;&gt;undefined&lt;/span&gt;&lt;font style=&quot;color: light-dark(rgb(201, 209, 217), rgb(255, 255, 255));&quot;&gt;,&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;font style=&quot;color: light-dark(rgb(201, 209, 217), rgb(255, 255, 255));&quot;&gt;&amp;nbsp; &amp;nbsp; &lt;/font&gt;&lt;span style=&quot;color: rgb(201, 209, 217);&quot;&gt;&lt;font style=&quot;color: light-dark(rgb(201, 209, 217), rgb(255, 255, 255));&quot;&gt;teamID&lt;/font&gt;&lt;/span&gt;&lt;span style=&quot;color: rgb(212, 212, 212);&quot;&gt;:&lt;/span&gt;&lt;font style=&quot;color: light-dark(rgb(201, 209, 217), rgb(255, 255, 255));&quot;&gt; &lt;/font&gt;&lt;span style=&quot;color: rgb(78, 201, 176);&quot;&gt;string&lt;/span&gt;&lt;font style=&quot;color: light-dark(rgb(201, 209, 217), rgb(255, 255, 255));&quot;&gt;,&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;font style=&quot;color: light-dark(rgb(201, 209, 217), rgb(255, 255, 255));&quot;&gt;&amp;nbsp; &amp;nbsp; &lt;/font&gt;&lt;span style=&quot;color: rgb(201, 209, 217);&quot;&gt;&lt;font style=&quot;color: light-dark(rgb(201, 209, 217), rgb(255, 255, 255));&quot;&gt;name&lt;/font&gt;&lt;/span&gt;&lt;span style=&quot;color: rgb(212, 212, 212);&quot;&gt;:&lt;/span&gt;&lt;font style=&quot;color: light-dark(rgb(201, 209, 217), rgb(255, 255, 255));&quot;&gt; &lt;/font&gt;&lt;span style=&quot;color: rgb(78, 201, 176);&quot;&gt;string&lt;/span&gt;&lt;font style=&quot;color: light-dark(rgb(201, 209, 217), rgb(255, 255, 255));&quot;&gt;,&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;font style=&quot;color: light-dark(rgb(201, 209, 217), rgb(255, 255, 255));&quot;&gt;&amp;nbsp; &amp;nbsp; &lt;/font&gt;&lt;span style=&quot;color: rgb(201, 209, 217);&quot;&gt;&lt;font style=&quot;color: light-dark(rgb(201, 209, 217), rgb(255, 255, 255));&quot;&gt;goals&lt;/font&gt;&lt;/span&gt;&lt;span style=&quot;color: rgb(212, 212, 212);&quot;&gt;:&lt;/span&gt;&lt;font style=&quot;color: light-dark(rgb(201, 209, 217), rgb(255, 255, 255));&quot;&gt; &lt;/font&gt;&lt;span style=&quot;color: rgb(78, 201, 176);&quot;&gt;number&lt;/span&gt;&lt;font style=&quot;color: light-dark(rgb(201, 209, 217), rgb(255, 255, 255));&quot;&gt;,&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;font style=&quot;color: light-dark(rgb(201, 209, 217), rgb(255, 255, 255));&quot;&gt;&amp;nbsp; &amp;nbsp; &lt;/font&gt;&lt;span style=&quot;color: rgb(201, 209, 217);&quot;&gt;&lt;font style=&quot;color: light-dark(rgb(201, 209, 217), rgb(255, 255, 255));&quot;&gt;matches&lt;/font&gt;&lt;/span&gt;&lt;span style=&quot;color: rgb(212, 212, 212);&quot;&gt;:&lt;/span&gt;&lt;font style=&quot;color: light-dark(rgb(201, 209, 217), rgb(255, 255, 255));&quot;&gt; &lt;/font&gt;&lt;span style=&quot;color: rgb(78, 201, 176);&quot;&gt;number&lt;/span&gt;&lt;font style=&quot;color: light-dark(rgb(201, 209, 217), rgb(255, 255, 255));&quot;&gt;,&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;font style=&quot;color: light-dark(rgb(18, 19, 20), rgb(0, 0, 0));&quot;&gt;&amp;nbsp; &amp;nbsp; &lt;/font&gt;&lt;span style=&quot;color: rgb(201, 209, 217);&quot;&gt;&lt;font style=&quot;color: light-dark(rgb(201, 209, 217), rgb(255, 255, 255));&quot;&gt;skill&lt;/font&gt;&lt;/span&gt;&lt;span style=&quot;color: rgb(212, 212, 212);&quot;&gt;:&lt;/span&gt;&lt;font style=&quot;color: light-dark(rgb(18, 19, 20), rgb(0, 0, 0));&quot;&gt; &lt;/font&gt;&lt;span style=&quot;color: rgb(78, 201, 176);&quot;&gt;number&lt;/span&gt;&lt;font style=&quot;color: light-dark(rgb(18, 19, 20), rgb(0, 0, 0));&quot;&gt;,&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;font style=&quot;color: light-dark(rgb(201, 209, 217), rgb(255, 255, 255));&quot;&gt;&amp;nbsp; &amp;nbsp; &lt;/font&gt;&lt;span style=&quot;color: rgb(201, 209, 217);&quot;&gt;&lt;font style=&quot;color: light-dark(rgb(201, 209, 217), rgb(255, 255, 255));&quot;&gt;position&lt;/font&gt;&lt;/span&gt;&lt;span style=&quot;color: rgb(212, 212, 212);&quot;&gt;:&lt;/span&gt;&lt;font style=&quot;color: light-dark(rgb(201, 209, 217), rgb(255, 255, 255));&quot;&gt; &lt;/font&gt;&lt;span style=&quot;color: rgb(78, 201, 176);&quot;&gt;EPosition&lt;/span&gt;&lt;/div&gt;&lt;font style=&quot;color: light-dark(rgb(201, 209, 217), rgb(255, 255, 255));&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;div style=&quot;color: light-dark(rgb(187, 190, 191), rgb(73, 75, 76));&quot;&gt;}&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="260" width="380" x="1420" y="150" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

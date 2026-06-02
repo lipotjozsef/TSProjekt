@@ -13,7 +13,8 @@ export function createTeamInput(team: HttpInterfaces.ITeam): HTMLElement
   )
 
   const teamIDValue: string = team.id!.toString();
-  const checkboxID: string = `csapat_id`;
+  const checkboxID: string = `csapat_id_${teamIDValue}`;
+  const checkboxName: string = "csapat_id";
 
   HTMLUtils.createElement<HTMLInputElement>(
     {
@@ -22,7 +23,7 @@ export function createTeamInput(team: HttpInterfaces.ITeam): HTMLElement
       id: checkboxID,
       attributes: {
         "type": "checkbox",
-        "name": checkboxID,
+        "name": checkboxName,
         "value": teamIDValue
       },
       parent: parent

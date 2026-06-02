@@ -91,8 +91,6 @@ export function addToResult(snapshot: HttpInterfaces.ITeam, existing: HttpInterf
         updatedHistory.shift();
     }
 
-    console.log(snapshot.points);
-
     return {
       ...snapshot,
       played: existingTeam.played + (snapshot.played || 0),
@@ -116,8 +114,6 @@ function createSnapshot(initialTeam: HttpInterfaces.ITeam, updatedTeam: HttpInte
         loses: updatedTeam.loses - initialTeam.loses,
         matchHistory: [result]
     } as HttpInterfaces.ITeam;
-
-    console.log(snapshot);
 
     return snapshot;
 }

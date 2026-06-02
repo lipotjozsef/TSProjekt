@@ -12,10 +12,10 @@ import tabCreatorModal from './HTMLcode/tabCreatorModal.html?raw';
 
 let application: HTMLElement;
 
-export function init(parent: HTMLElement, _: Function)
+export function init(parent: HTMLElement, _: Function): Function
 {
   application = parent;
-  listenerForTableChange();
+  const destroyListener = listenerForTableChange();
 
   TableManager.loadStorage();
   loadTableModal();
@@ -24,6 +24,12 @@ export function init(parent: HTMLElement, _: Function)
 
   listenersForDetailModal();
   listenersForTableModal();
+
+  return () =>
+  {
+    if (destroyListener)
+      destroyListener();
+  }
 }
 
 function loadTableModal()
@@ -35,7 +41,7 @@ function loadTableModal()
         return;
 
     modalTitle.innerText = "Tabella Kreáló"
-    modalTitle.classList = "fw-bold text-decoration-underline p-1";
+    modalTitle.classList = "modal-title fw-bold text-decoration-underline p-1";
     modalBody.innerHTML = tabCreatorModal;
 }
 
@@ -99,13 +105,19 @@ function listenersForDetailModal()
   });
 }
 
-function listenerForTableChange(): void
+function listenerForTableChange(): Function | null
 {
   const tableContainer = document.querySelector<HTMLElement>("#table-container");
   if (!tableContainer)
-    return;
+    return null;
 
-  window.addEventListener("tableschanged", () => renderTableView(tableContainer, application));
+  const handler = () => renderTableView(tableContainer, application);
+
+  window.addEventListener("tableschanged", handler);
+
+  return () => { 
+    window.removeEventListener("tableschanged", handler);
+   };
 }
 
 function createTeamsInputsForModal(): void

@@ -4,11 +4,13 @@ const tabContainer: HTMLElement | null = document.querySelector("#my-tab-content
 
 let application: HTMLElement;
 
-type LoadViewFn = (viewName: string, parent: HTMLElement) => Promise<boolean>;
+type ViewReturn = {status: boolean, cleanUp: Function | null}
+type LoadViewFn = (viewName: string, parent: HTMLElement) => Promise<ViewReturn>;
 let onViewChange: LoadViewFn;
 
 let fallbackView: string = "tables";
 let fallbackCounter: number = 0;
+let currentViewCleanUp: Function | null;
 
 export function init(myApp: HTMLElement, loadViewCallback: LoadViewFn)
 {
@@ -65,18 +67,40 @@ function listenForNavLinks(): void
             const viewName = button.getAttribute('data-view');
 
             if (viewName)
+            {
+                clearEventListenersForSharedForm();
+
+                currentViewCleanUp?.();
+
                 await triggerSubViewLoad(viewName);
+            }
         })
     })
+}
+
+function clearEventListenersForSharedForm(): void
+{
+    const old_form = application.querySelector<HTMLFormElement>("#form-modal");
+    const new_form = old_form?.cloneNode() as HTMLElement;
+
+    if (old_form && new_form)
+    {
+        new_form.innerHTML = old_form.innerHTML;
+        old_form.replaceWith(new_form);
+    }
 }
 
 async function triggerSubViewLoad(viewName: string): Promise<void>
 {
     if (tabContainer)
     {
-        if (await onViewChange(viewName, tabContainer))
+        const viewReturn = await onViewChange(viewName, tabContainer);
+        if (viewReturn.status)
         {
             TabManager.changeTab(viewName);
+
+            currentViewCleanUp = viewReturn.cleanUp;
+
             fallbackCounter = 0;
         }
         else if(fallbackCounter != 1)

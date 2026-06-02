@@ -4,7 +4,8 @@ import './styles/style.css'
 
 import { HttpService } from './api/http.service'
 
-type ViewInit = (appDiv: HTMLElement, callback: Function) => void;
+type ViewInit = (appDiv: HTMLElement, callback: Function) => Function;
+type ViewReturn = {status: boolean, cleanUp: Function | null}
 
 const myApp: HTMLElement | null = document.querySelector("#app");
 
@@ -27,10 +28,16 @@ async function initialize(): Promise<void>
   await loadView('main', myApp);
 }
 
-async function loadView(viewName: string, parent: HTMLElement): Promise<boolean>
+async function loadView(viewName: string, parent: HTMLElement): Promise<ViewReturn>
 {
+
+  const loadViewObject: ViewReturn = {
+    status: false,
+    cleanUp: null
+  }
+
   if (!myApp)
-    return false;
+    return loadViewObject;
 
   try
   {
@@ -43,10 +50,15 @@ async function loadView(viewName: string, parent: HTMLElement): Promise<boolean>
 
     const initFunction = scriptModule.init as ViewInit;
     if (initFunction)
-      await initFunction(myApp, loadView);
+    {
+      const cleanUp = await initFunction(myApp, loadView);
+      loadViewObject.cleanUp = cleanUp;
+    }
     else
       throw new Error(`A ${viewName}.ts nem exportál egy init(myApp: HTMLElement, callback: Function) function-t!`);
-    return true;
+
+    loadViewObject.status = true;
+    return loadViewObject;
   }
   catch (error)
   {
@@ -59,7 +71,7 @@ async function loadView(viewName: string, parent: HTMLElement): Promise<boolean>
     <button class="btn btn-outline-warning d-block mx-auto">Újratöltés</button>`;
 
     myApp.querySelector<HTMLButtonElement>(".btn")!.onclick = () => {location.reload()};
-    return false;
+    return loadViewObject;
   }
 }
 

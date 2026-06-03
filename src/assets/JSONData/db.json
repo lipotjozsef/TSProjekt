@@ -109,24 +109,6 @@
       "matches": 10,
       "skill": 70,
       "position": "Bal hátvéd"
-    },
-    {
-      "id": "11",
-      "teamID": 3,
-      "name": "Varga Roland",
-      "goals": 1,
-      "matches": 7,
-      "skill": 65,
-      "position": "Középső középpályás"
-    },
-    {
-      "id": "12",
-      "teamID": 3,
-      "name": "Simon Attila",
-      "goals": 4,
-      "matches": 10,
-      "skill": 72,
-      "position": "Csatár"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

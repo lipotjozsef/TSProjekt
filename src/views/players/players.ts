@@ -5,22 +5,23 @@ import * as HttpInterfaces from '../../types/TSTypes'
 import playerModal from "./playerModal.html?raw"
 
 let application: HTMLElement;
+let clickedPlayer: any;
 
-export function init(parent: HTMLElement, _: Function) {
+export async function init(parent: HTMLElement, _: Function) {
     application = parent;
 
-    loadTableModal();
+    await loadPlayerModal();
     displayPlayers();
 
     window.addEventListener("cachechanged", () => {
         displayPlayers();
     });
 
-    listenForUpdatePlayer();
+    await listenForUpdatePlayer();
 }
 
 
-function loadTableModal()
+async function loadPlayerModal()
 {
     const modalTitle = application.querySelector<HTMLElement>(".modal-title");
     const modalBody = application.querySelector<HTMLElement>(".modal-body");
@@ -30,6 +31,36 @@ function loadTableModal()
 
     modalTitle.innerText = "Játékos Kreáló"
     modalBody.innerHTML = playerModal;
+
+    let form = document.querySelector<HTMLFormElement>("#form-modal")!;
+
+    form!.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        let data = new FormData(form);
+        let data_entries = Array.from(data.entries());
+        console.log(data_entries);
+
+        let newPlayer: any = { ...HttpService.getPlayers[0]};
+
+        delete (newPlayer as any).id;
+        newPlayer.name = data_entries[0][1].toString();
+        newPlayer.teamID = data_entries[1][1].toString();
+        newPlayer.goals = Number(data_entries[2][1].toString());
+        newPlayer.matches = Number(data_entries[3][1].toString());
+        newPlayer.skill = Number(data_entries[4][1].toString());
+        Object.entries(EPosition).forEach(pos => {
+            if(pos[0].toString() == data_entries[5][1].toString()){
+                newPlayer.position = pos[1];
+                
+            }
+        });
+
+        form.reset();
+        await HttpService.submitEntry(newPlayer, CategoryID.IPlayers, "players");
+        console.log(newPlayer);
+        
+    });
+
 }
 
 async function displayPlayers() {
@@ -45,21 +76,24 @@ async function displayPlayers() {
     const teams = HttpService.getTeams;
 
     tbody.innerHTML = '';
+    let currID = 1;
 
     HttpService.getPlayers.forEach(p => {
 
     const tr = document.createElement("tr");
-    tr.innerHTML = `
-    <td>${p.id}</td>
-    <td>${p.name}</td>
-    <td>${getTeamById(p.teamID)}</td>
-    <td>${p.position}</td>
-    <td>
-    <button class = 'btn btn-update' data-id=${p.id} data-bs-toggle='modal' data-bs-target='#updateModal'>Szerkesztés</button>
-    <button class = 'btn btn-delete' data-id=${p.id}>Törlés</button>
-    </td>
-    `;
+
+        tr.innerHTML = `
+            <td>${currID}</td>
+            <td>${p.name}</td>
+            <td>${getTeamById(p.teamID)}</td>
+            <td>${p.position}</td>
+            <td>
+            <button class = 'btn btn-update' data-id=${p.id} data-bs-toggle='modal' data-bs-target='#updateModal'>Szerkesztés</button>
+            <button class = 'btn btn-delete' data-id=${p.id}>Törlés</button>
+            </td>
+        `;
         tbody.appendChild(tr);
+        currID += 1;
     });
 
     document.querySelector("#playersTable")?.addEventListener("click", async (e) => {
@@ -71,7 +105,7 @@ async function displayPlayers() {
             }
 
         }else if(btn.classList.contains("btn-update")){
-            let clickedPlayer = getPlayerById(id);
+            clickedPlayer = getPlayerById(id);
             
             //document.querySelector("#updatename")!.ariaValueText = clickedPlayer!.name;
             
@@ -83,16 +117,15 @@ async function displayPlayers() {
 
             (Object.entries(EPosition)).forEach(pos => {
                 if(pos[1] == clickedPlayer!.position){
-                    console.log(document.querySelector(`#${pos[0]}`) as HTMLOptionElement);
-                    
                     (document.querySelector(`#${pos[0]}`) as HTMLOptionElement).selected = true;
                 }
-            });    
+            });
             
                         
             
         }
     });
+
 
 }
 
@@ -119,19 +152,33 @@ function getPlayerById(id: string): HttpInterfaces.IPlayer | null {
     return player;
 }
 
-function listenForUpdatePlayer() {
+async function listenForUpdatePlayer() {
     let form = document.querySelector<HTMLFormElement>("#adatok");
     if (!form) {
         console.log("GATYA");
-
         return;
     }
 
-    form.addEventListener("submit", (e) => {
+    form.addEventListener("submit", async (e) => {
         e.preventDefault();
         const data = new FormData(form);
         form.reset();
-        console.log(Array.from(data.entries()));
+        let newPlayer: any = clickedPlayer!;
+        let data_entries = Array.from(data.entries())
+        
+        newPlayer.name = data_entries[0][1].toString();
+        newPlayer.teamID = data_entries[1][1].toString();
+        newPlayer.goals = Number(data_entries[2][1].toString());
+        newPlayer.matches = Number(data_entries[3][1].toString());
+        newPlayer.skill = Number(data_entries[4][1].toString());
+        Object.entries(EPosition).forEach(pos => {
+            if(pos[0].toString() == data_entries[5][1].toString()){
+                newPlayer.position = pos[1];
+                
+            }
+        });
+        await HttpService.updateEntry(clickedPlayer, newPlayer, newPlayer.id, CategoryID.IPlayers, "players");
+
 
     });
 }

@@ -32,7 +32,7 @@ function loadCurrentlyActive(): void
     const activeTab = application.querySelector<HTMLButtonElement>('.nav-link.active');
     const defaultView = activeTab?.getAttribute('data-view');
     if (defaultView)
-        triggerSubViewLoad(defaultView!);
+        triggerSubViewLoad(defaultView);
 }
 
 function listenForNavLinks(): void

@@ -19,8 +19,7 @@ async function initialize(): Promise<void>
   }
 
   await tryUpdateCache();
-  const myApp: HTMLElement | null = document.querySelector("#app");
-  
+
   if (!myApp)
     throw new Error("Could not find #app div element!");
   myApp.className =  "bg-light";
@@ -37,11 +36,11 @@ async function loadView(viewName: string, parent: HTMLElement): Promise<void>
   {
     const htmlModule = await import(`./views/${viewName}/${viewName}.html?raw`);
     const htmlContent = htmlModule.default;
-    
+
     parent.innerHTML = htmlContent;
-    
+
     const scriptModule = await import(`./views/${viewName}/${viewName}.ts`);
-    
+
     const initFunction = scriptModule.init as ViewInit;
     if (initFunction)
       await initFunction(myApp, loadView);

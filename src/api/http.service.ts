@@ -10,7 +10,7 @@ export enum CategoryID
 export abstract class HttpService
 {
     private static cache: Map<number, Map<string, object>> = new Map<number, Map<string, object>>();
-    static APIURL: string = "http://localhost:3000/";
+    static APIURL: string = "http://localhost:4512/";
 
     private static eventCacheChange: CustomEvent = new CustomEvent("cachechanged");
 
@@ -108,7 +108,7 @@ export abstract class HttpService
         })
         .catch(error =>
         {
-            console.log('error', error);
+            console.log('A GET kérelemmel hiba történt:', error);
             objects = [];
         });
 
@@ -121,7 +121,6 @@ export abstract class HttpService
         if (this.cache.has(categoryID))
         {
             subMap = this.cache.get(categoryID)! as Map<string, T>;
-            console.log(Array.from(subMap.keys()));
             if (!subMap.has(valueID) && !ignoreCheck)
                 return undefined;
         }
@@ -151,7 +150,7 @@ export abstract class HttpService
         .then(result => result as T)
         .catch(error =>
         {
-            console.log('error', error);
+            console.log('A POST kérelemmel hiba történt: ', error);
             return null;
         });
 
@@ -165,6 +164,42 @@ export abstract class HttpService
         }
 
         return newObject;
+    }
+
+    static async putEntry<T extends IIdentifiable>(newValue: T, valueID: string, categoryID: CategoryID, endPointRealtivePath: string): Promise<boolean>
+    {
+        const subMap: Map<string, T> | undefined = this.getSubCacheMap<T>(valueID, categoryID);
+        if (!subMap)
+            return false;
+
+        if (newValue.id && !subMap.has(newValue.id))
+            return false;
+
+        let myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        let raw = JSON.stringify(newValue);
+
+        let requestOptions: RequestInit = {
+            method: 'PUT',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
+
+        let status: boolean = await fetch(`${this.APIURL}${endPointRealtivePath}\\${valueID}`, requestOptions)
+        .then(response => this.checkEndPoint(response, endPointRealtivePath))
+        .then(_ => true)
+        .catch(error =>
+        {
+            console.log('A PUT kérelemmel hiba történt: ', error);
+            return false;
+        });
+
+        if (newValue.id)
+            subMap.set(newValue.id, newValue);
+
+        return status;
     }
 
     static async updateEntry<T extends IIdentifiable>(oldValue: T, newValue: T, valueID: string, categoryID: CategoryID, endPointRealtivePath: string): Promise<boolean>
@@ -203,7 +238,7 @@ export abstract class HttpService
         .then(_ => true)
         .catch(error =>
         {
-            console.log('error', error);
+            console.log('A PATCH kérelemmel hiba történt: ', error);
             return false;
         });
 
@@ -236,7 +271,7 @@ export abstract class HttpService
         .then(_ => true)
         .catch(error => 
         {
-            console.log('error', error);
+            console.log('A DELETE kérelemmel hiba történt: ', error);
             return false;
         });
 

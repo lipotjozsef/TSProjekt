@@ -45,11 +45,11 @@ export abstract class HttpService
     static async updateCache(): Promise<boolean>
     {
         const players: IPlayer[] = await this.queryAll<IPlayer>("players");
-        if (players.length == 0)
+        if (!players.length)
             throw new APIErrors.ErrorCacheFailed("A játékosok lekérésében hiba lépett fel!");
 
         const teams: ITeam[] = await this.queryAll<ITeam>("teams");
-        if (teams.length == 0)
+        if (!teams)
             throw new APIErrors.ErrorCacheFailed("A csapatok lekérésében hiba lépett fel!");
 
         {

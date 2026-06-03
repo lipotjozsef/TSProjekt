@@ -36,7 +36,7 @@ export function rollBackTabData(data: ITable)
 export async function rollbackOnServer(data: ITable): Promise<void>
 {
   const playingTeamIDs = new Set(
-    Array.from( data.teamResults.keys()).map(id => id.toString())
+    Array.from( data.teamResults.keys()).map(id => id?.toString() ?? "")
   );
       
   const serverTeamsToUpdate = HttpService.getTeams.filter(t => playingTeamIDs.has(t.id ?? ''));

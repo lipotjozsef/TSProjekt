@@ -63,18 +63,32 @@ function listenForNavLinks(): void
     {
         link.addEventListener("click", async (ev) =>
         {
+            disableButtons(navLinks, true);
+
             const button = ev?.currentTarget as HTMLHtmlElement;
             const viewName = button.getAttribute('data-view');
 
             if (viewName)
             {
                 clearEventListenersForSharedForm();
-
+                
                 currentViewCleanUp?.();
 
                 await triggerSubViewLoad(viewName);
             }
+
+            disableButtons(navLinks, false);
         })
+    })
+}
+
+function disableButtons(Buttons: NodeList, state: boolean)
+{
+    Buttons.forEach( btn =>
+    {
+        const myButton = btn as HTMLButtonElement;
+        if (myButton)
+            myButton.disabled = state;
     })
 }
 

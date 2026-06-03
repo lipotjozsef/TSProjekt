@@ -4,6 +4,8 @@ import './styles/style.css'
 
 import { HttpService } from './api/http.service'
 
+import SpinnerHTML from './components/spinnerLoader.html?raw';
+
 type ViewInit = (appDiv: HTMLElement, callback: Function) => Function;
 type ViewReturn = {status: boolean, cleanUp: Function | null}
 
@@ -25,7 +27,6 @@ async function initialize(): Promise<void>
   if (!myApp)
     throw new Error("Could not find #app div element!");
   myApp.className = "bg-light h-100";
-  
   await loadView('main', myApp);
 }
 
@@ -42,6 +43,9 @@ async function loadView(viewName: string, parent: HTMLElement): Promise<ViewRetu
 
   try
   {
+
+    parent.innerHTML = SpinnerHTML;
+
     const htmlModule = await import(`./views/${viewName}/${viewName}.html?raw`);
     const htmlContent = htmlModule.default;
 
@@ -93,3 +97,24 @@ async function tryUpdateCache(): Promise<void>
     alert(myError.message);
   }
 }
+
+var consoleVerbose = false;
+
+var console = (function(oldCons){
+    return {
+        log: function(...data: any[]){
+          if(consoleVerbose) oldCons.log(data);  
+        },
+        info: function (...data: any[]) {
+            if(consoleVerbose) oldCons.info(data);
+        },
+        warn: function (...data: any[]) {
+            if(consoleVerbose) oldCons.warn(data);
+        },
+        error: function (...data: any[]) {
+            oldCons.error(data);
+        }
+    } as Console;
+}(window.console));
+
+window.console = console;

@@ -38,7 +38,7 @@ function loadPlayerModal()
     modalTitle.className = "modal-title fw-bold text-decoration-underline p-1";
     modalBody.innerHTML = playerModal;
 
-    let form = document.querySelector<HTMLFormElement>("#form-modal")!;
+    let form = application.querySelector<HTMLFormElement>("#form-modal")!;
 
     form!.addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -71,15 +71,13 @@ function loadPlayerModal()
 
 async function displayPlayers() {
 
-    const tabContent = document.querySelector<HTMLElement>(".tab-content");
-    const table = document.querySelector<HTMLTableElement>("#playersTable");
+    const tabContent = application.querySelector<HTMLElement>(".tab-content");
+    const table = application.querySelector<HTMLTableElement>("#playersTable");
 
     if (!tabContent || !table)
         return;
 
     const tbody = table.tBodies[0];
-
-    const teams = HttpService.getTeams;
 
     tbody.innerHTML = '';
     let currID = 1;
@@ -102,37 +100,37 @@ async function displayPlayers() {
         currID += 1;
     });
 
-    document.querySelector("#playersTable")?.addEventListener("click", async (e) => {
-        let btn = e.target as HTMLButtonElement;
-        let id = btn.dataset.id!;
-        if (btn.classList.contains("btn-delete")) {
-            if(confirm(`Biztosan törölni szeretnéd a(z) ${id}. játékost?`)){
-                console.log(await HttpService.deleteEntry(id, CategoryID.IPlayers, "players"));
-            }
+    application.querySelector("#playersTable")?.addEventListener("click", deletePlayerClickFunction);
 
-        }else if(btn.classList.contains("btn-update")){
-            clickedPlayer = getPlayerById(id);
-            
-            //document.querySelector("#updatename")!.ariaValueText = clickedPlayer!.name;
-            
-            (document.querySelector("#name") as HTMLInputElement).value = clickedPlayer!.name;
-            (document.querySelector("#teamID") as HTMLInputElement).value = clickedPlayer!.teamID;
-            (document.querySelector("#goals") as HTMLInputElement).value = clickedPlayer!.goals.toString();
-            (document.querySelector("#matches") as HTMLInputElement).value = clickedPlayer!.matches.toString();
-            (document.querySelector("#skill") as HTMLInputElement).value = clickedPlayer!.skill.toString();
 
-            (Object.entries(EPosition)).forEach(pos => {
-                if(pos[1] == clickedPlayer!.position){
-                    (document.querySelector(`#${pos[0]}`) as HTMLOptionElement).selected = true;
-                }
-            });
-            
-                        
-            
+}   
+
+async function deletePlayerClickFunction(e: Event)
+{
+    let btn = e.target as HTMLButtonElement;
+    let id = btn.dataset.id!;
+    if (btn.classList.contains("btn-delete")) {
+        if(confirm(`Biztosan törölni szeretnéd a kiválasztott játékost?`)){
+            console.log(await HttpService.deleteEntry(id, CategoryID.IPlayers, "players"));
         }
-    });
 
+    }
+    else if(btn.classList.contains("btn-update")){
+        clickedPlayer = getPlayerById(id);
+        //document.querySelector("#updatename")!.ariaValueText = clickedPlayer!.name;
+        
+        (application.querySelector("#name") as HTMLInputElement).value = clickedPlayer!.name;
+        (application.querySelector("#teamID") as HTMLInputElement).value = clickedPlayer!.teamID;
+        (application.querySelector("#goals") as HTMLInputElement).value = clickedPlayer!.goals.toString();
+        (application.querySelector("#matches") as HTMLInputElement).value = clickedPlayer!.matches.toString();
+        (application.querySelector("#skill") as HTMLInputElement).value = clickedPlayer!.skill.toString();
 
+        (Object.entries(EPosition)).forEach(pos => {
+            if(pos[1] == clickedPlayer!.position){
+                (application.querySelector(`#${pos[0]}`) as HTMLOptionElement).selected = true;
+            }
+        });    
+        }
 }
 
 function getTeamById(id: string): string {
@@ -159,7 +157,7 @@ function getPlayerById(id: string): HttpInterfaces.IPlayer | null {
 }
 
 function listenForUpdatePlayer() {
-    let form = document.querySelector<HTMLFormElement>("#adatok");
+    let form = application.querySelector<HTMLFormElement>("#adatok");
     if (!form) {
         console.log("GATYA");
         return;
@@ -168,7 +166,7 @@ function listenForUpdatePlayer() {
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
         const data = new FormData(form);
-        form.reset();
+        
         let newPlayer: any = {...clickedPlayer!};
         let data_entries = Array.from(data.entries())
         
@@ -185,24 +183,17 @@ function listenForUpdatePlayer() {
         });
         await HttpService.updateEntry(clickedPlayer, newPlayer, newPlayer.id, CategoryID.IPlayers, "players");
 
-        closeModal(application, "update-player-btn", "updateModal");
+        closeModal(application, "hidden-modal-close");
+        form.reset();
     });
 }
 
-export function closeModal(
+function closeModal(
   application: HTMLElement,
-  submitButtonID: string,
-  dismissModalID: string
+  submitButtonID: string
 )
 {
-  const submitButton = application.querySelector<HTMLButtonElement>("#".concat(submitButtonID));
-  if (!submitButton) return;
-
-    console.log(submitButton);
-
-  submitButton.type = "button"; // so the submit event doesn't double fire!
-  submitButton.setAttribute("data-bs-dismiss", dismissModalID);
-  submitButton.click();
-  submitButton.setAttribute("data-bs-dismiss", "");
-  submitButton.type = "submit";
+    const submitButton = application.querySelector<HTMLButtonElement>("#".concat(submitButtonID));
+    if (!submitButton) return;
+    submitButton.click();
 }

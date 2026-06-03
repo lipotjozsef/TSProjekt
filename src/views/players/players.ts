@@ -7,21 +7,26 @@ import playerModal from "./playerModal.html?raw"
 let application: HTMLElement;
 let clickedPlayer: any;
 
-export async function init(parent: HTMLElement, _: Function) {
+export function init(parent: HTMLElement, _: Function): Function {
     application = parent;
 
-    await loadPlayerModal();
+    loadPlayerModal();
     displayPlayers();
 
-    window.addEventListener("cachechanged", () => {
+    const handler = () => {
         displayPlayers();
-    });
+    }
+    window.addEventListener("cachechanged", handler);
 
-    await listenForUpdatePlayer();
+    listenForUpdatePlayer();
+
+    return () => {
+        window.removeEventListener("cachechanged", handler);
+    }
 }
 
 
-async function loadPlayerModal()
+function loadPlayerModal()
 {
     const modalTitle = application.querySelector<HTMLElement>(".modal-title");
     const modalBody = application.querySelector<HTMLElement>(".modal-body");
@@ -30,6 +35,7 @@ async function loadPlayerModal()
         return;
 
     modalTitle.innerText = "Játékos Kreáló"
+    modalTitle.className = "modal-title fw-bold text-decoration-underline p-1";
     modalBody.innerHTML = playerModal;
 
     let form = document.querySelector<HTMLFormElement>("#form-modal")!;
@@ -152,7 +158,7 @@ function getPlayerById(id: string): HttpInterfaces.IPlayer | null {
     return player;
 }
 
-async function listenForUpdatePlayer() {
+function listenForUpdatePlayer() {
     let form = document.querySelector<HTMLFormElement>("#adatok");
     if (!form) {
         console.log("GATYA");
@@ -163,7 +169,7 @@ async function listenForUpdatePlayer() {
         e.preventDefault();
         const data = new FormData(form);
         form.reset();
-        let newPlayer: any = clickedPlayer!;
+        let newPlayer: any = {...clickedPlayer!};
         let data_entries = Array.from(data.entries())
         
         newPlayer.name = data_entries[0][1].toString();
@@ -179,7 +185,24 @@ async function listenForUpdatePlayer() {
         });
         await HttpService.updateEntry(clickedPlayer, newPlayer, newPlayer.id, CategoryID.IPlayers, "players");
 
-
+        closeModal(application, "update-player-btn", "updateModal");
     });
 }
 
+export function closeModal(
+  application: HTMLElement,
+  submitButtonID: string,
+  dismissModalID: string
+)
+{
+  const submitButton = application.querySelector<HTMLButtonElement>("#".concat(submitButtonID));
+  if (!submitButton) return;
+
+    console.log(submitButton);
+
+  submitButton.type = "button"; // so the submit event doesn't double fire!
+  submitButton.setAttribute("data-bs-dismiss", dismissModalID);
+  submitButton.click();
+  submitButton.setAttribute("data-bs-dismiss", "");
+  submitButton.type = "submit";
+}

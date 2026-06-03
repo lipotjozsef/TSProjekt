@@ -11,22 +11,31 @@ export function init(parent: HTMLElement, _: Function) {
     displayTeams();
 
 
-    window.addEventListener("cachechanged", () => {
+    const handler = () => {
         displayTeams();
-    }); 
+    }
+    window.addEventListener("cachechanged", handler);
 
     listenForUpdateTeam();
     listenForCreateTeam();
+ 
+    document.getElementById("main-new-btn")?.addEventListener("click", createPlayerInputs);
+
+    return () => {
+        window.removeEventListener("cachechanged", handler);
+        document.getElementById("main-new-btn")?.removeEventListener("click", createPlayerInputs);
+    }
 }
 
-document.getElementById("new")?.addEventListener("click", () => {
+function createPlayerInputs()
+{
     (document.getElementById("name") as HTMLInputElement).value = "";
     document.getElementById("players_new")!.innerHTML = ' '
     HttpService.getPlayers.forEach(p => {
         let checkbox = `<input type='checkbox' id='${p.id}_player_new' name='${p.id}_player_new'><label for='${p.id}_player_new'>${p.name}</label><br>`;
         document.getElementById("players_new")!.innerHTML += checkbox;
-    })
-});
+    });
+}
 
 function loadTableModal()
 {
@@ -37,7 +46,7 @@ function loadTableModal()
         return;
 
     modalTitle.innerText = "Csapat Kreáló"
-
+    modalTitle.className = "modal-title fw-bold text-decoration-underline p-1";
     modalBody.innerHTML = teamModal;
 }
 
@@ -129,7 +138,8 @@ function listenForCreateTeam() {
             played: 0,
             wins: 0,
             draws: 0,
-            loses: 0
+            loses: 0,
+            matchHistory: undefined
         }
         const created_team = await HttpService.submitEntry(new_team, CategoryID.ITeams, "teams");
         let players = HttpService.getPlayers;

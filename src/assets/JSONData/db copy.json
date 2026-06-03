@@ -30,6 +30,24 @@
   ],
   "players": [
     {
+      "id": "1",
+      "teamID": 1,
+      "name": "Kovács László",
+      "goals": 0,
+      "matches": 10,
+      "skill": 85,
+      "position": "Kapus"
+    },
+    {
+      "id": "2",
+      "teamID": 1,
+      "name": "Szabó Márk",
+      "goals": 12,
+      "matches": 10,
+      "skill": 92,
+      "position": "Csatár"
+    },
+    {
       "id": "3",
       "teamID": 1,
       "name": "Nagy Péter",
@@ -100,6 +118,24 @@
       "matches": 10,
       "skill": 70,
       "position": "Bal hátvéd"
+    },
+    {
+      "id": "11",
+      "teamID": 3,
+      "name": "Varga Roland",
+      "goals": 1,
+      "matches": 7,
+      "skill": 65,
+      "position": "Középső középpályás"
+    },
+    {
+      "id": "12",
+      "teamID": 3,
+      "name": "Simon Attila",
+      "goals": 4,
+      "matches": 10,
+      "skill": 72,
+      "position": "Csatár"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

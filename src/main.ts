@@ -19,7 +19,8 @@ async function initialize(): Promise<void>
   }
 
   await tryUpdateCache();
-
+  const myApp: HTMLElement | null = document.querySelector("#app");
+  
   if (!myApp)
     throw new Error("Could not find #app div element!");
   myApp.className =  "bg-light";

@@ -30,15 +30,6 @@
   ],
   "players": [
     {
-      "id": "2",
-      "teamID": 1,
-      "name": "Szabó Márk",
-      "goals": 12,
-      "matches": 10,
-      "skill": 92,
-      "position": "Csatár"
-    },
-    {
       "id": "3",
       "teamID": 1,
       "name": "Nagy Péter",

@@ -108,7 +108,7 @@ export abstract class HttpService
         })
         .catch(error =>
         {
-            console.log('error', error);
+            console.log('A GET kérelemmel hiba történt:', error);
             objects = [];
         });
 
@@ -121,7 +121,6 @@ export abstract class HttpService
         if (this.cache.has(categoryID))
         {
             subMap = this.cache.get(categoryID)! as Map<string, T>;
-            console.log(Array.from(subMap.keys()));
             if (!subMap.has(valueID) && !ignoreCheck)
                 return undefined;
         }
@@ -151,7 +150,7 @@ export abstract class HttpService
         .then(result => result as T)
         .catch(error =>
         {
-            console.log('error', error);
+            console.log('A POST kérelemmel hiba történt: ', error);
             return null;
         });
 
@@ -239,7 +238,7 @@ export abstract class HttpService
         .then(_ => true)
         .catch(error =>
         {
-            console.log('error', error);
+            console.log('A PATCH kérelemmel hiba történt: ', error);
             return false;
         });
 
@@ -272,7 +271,7 @@ export abstract class HttpService
         .then(_ => true)
         .catch(error => 
         {
-            console.log('error', error);
+            console.log('A DELETE kérelemmel hiba történt: ', error);
             return false;
         });
 

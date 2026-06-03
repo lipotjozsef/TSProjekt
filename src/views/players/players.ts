@@ -1,0 +1,185 @@
+import { HttpService, CategoryID } from '../../api/http.service'
+import { EPosition } from '../../types/EPosition';
+import * as HttpInterfaces from '../../types/TSTypes'
+
+import playerModal from "./playerModal.html?raw"
+
+let application: HTMLElement;
+let clickedPlayer: any;
+
+export async function init(parent: HTMLElement, _: Function) {
+    application = parent;
+
+    await loadPlayerModal();
+    displayPlayers();
+
+    window.addEventListener("cachechanged", () => {
+        displayPlayers();
+    });
+
+    await listenForUpdatePlayer();
+}
+
+
+async function loadPlayerModal()
+{
+    const modalTitle = application.querySelector<HTMLElement>(".modal-title");
+    const modalBody = application.querySelector<HTMLElement>(".modal-body");
+
+    if (!modalTitle || !modalBody)
+        return;
+
+    modalTitle.innerText = "Játékos Kreáló"
+    modalBody.innerHTML = playerModal;
+
+    let form = document.querySelector<HTMLFormElement>("#form-modal")!;
+
+    form!.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        let data = new FormData(form);
+        let data_entries = Array.from(data.entries());
+        console.log(data_entries);
+
+        let newPlayer: any = { ...HttpService.getPlayers[0]};
+
+        delete (newPlayer as any).id;
+        newPlayer.name = data_entries[0][1].toString();
+        newPlayer.teamID = data_entries[1][1].toString();
+        newPlayer.goals = Number(data_entries[2][1].toString());
+        newPlayer.matches = Number(data_entries[3][1].toString());
+        newPlayer.skill = Number(data_entries[4][1].toString());
+        Object.entries(EPosition).forEach(pos => {
+            if(pos[0].toString() == data_entries[5][1].toString()){
+                newPlayer.position = pos[1];
+                
+            }
+        });
+
+        form.reset();
+        await HttpService.submitEntry(newPlayer, CategoryID.IPlayers, "players");
+        console.log(newPlayer);
+        
+    });
+
+}
+
+async function displayPlayers() {
+
+    const tabContent = document.querySelector<HTMLElement>(".tab-content");
+    const table = document.querySelector<HTMLTableElement>("#playersTable");
+
+    if (!tabContent || !table)
+        return;
+
+    const tbody = table.tBodies[0];
+
+    const teams = HttpService.getTeams;
+
+    tbody.innerHTML = '';
+    let currID = 1;
+
+    HttpService.getPlayers.forEach(p => {
+
+    const tr = document.createElement("tr");
+
+        tr.innerHTML = `
+            <td>${currID}</td>
+            <td>${p.name}</td>
+            <td>${getTeamById(p.teamID)}</td>
+            <td>${p.position}</td>
+            <td>
+            <button class = 'btn btn-update' data-id=${p.id} data-bs-toggle='modal' data-bs-target='#updateModal'>Szerkesztés</button>
+            <button class = 'btn btn-delete' data-id=${p.id}>Törlés</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+        currID += 1;
+    });
+
+    document.querySelector("#playersTable")?.addEventListener("click", async (e) => {
+        let btn = e.target as HTMLButtonElement;
+        let id = btn.dataset.id!;
+        if (btn.classList.contains("btn-delete")) {
+            if(confirm(`Biztosan törölni szeretnéd a(z) ${id}. játékost?`)){
+                console.log(await HttpService.deleteEntry(id, CategoryID.IPlayers, "players"));
+            }
+
+        }else if(btn.classList.contains("btn-update")){
+            clickedPlayer = getPlayerById(id);
+            
+            //document.querySelector("#updatename")!.ariaValueText = clickedPlayer!.name;
+            
+            (document.querySelector("#name") as HTMLInputElement).value = clickedPlayer!.name;
+            (document.querySelector("#teamID") as HTMLInputElement).value = clickedPlayer!.teamID;
+            (document.querySelector("#goals") as HTMLInputElement).value = clickedPlayer!.goals.toString();
+            (document.querySelector("#matches") as HTMLInputElement).value = clickedPlayer!.matches.toString();
+            (document.querySelector("#skill") as HTMLInputElement).value = clickedPlayer!.skill.toString();
+
+            (Object.entries(EPosition)).forEach(pos => {
+                if(pos[1] == clickedPlayer!.position){
+                    (document.querySelector(`#${pos[0]}`) as HTMLOptionElement).selected = true;
+                }
+            });
+            
+                        
+            
+        }
+    });
+
+
+}
+
+function getTeamById(id: string): string {
+    let return_val = "Nincs csapata";
+    HttpService.getTeams.forEach(t => {
+        if (t.id?.toString() == id) {
+            return_val = t.name;
+        }
+
+    });
+    return return_val;
+}
+
+function getPlayerById(id: string): HttpInterfaces.IPlayer | null {
+    let player = null;
+    HttpService.getPlayers.forEach(p => {
+        if (p.id?.toString() == id) {
+            player = p;
+        }
+
+    });
+
+    return player;
+}
+
+async function listenForUpdatePlayer() {
+    let form = document.querySelector<HTMLFormElement>("#adatok");
+    if (!form) {
+        console.log("GATYA");
+        return;
+    }
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const data = new FormData(form);
+        form.reset();
+        let newPlayer: any = clickedPlayer!;
+        let data_entries = Array.from(data.entries())
+        
+        newPlayer.name = data_entries[0][1].toString();
+        newPlayer.teamID = data_entries[1][1].toString();
+        newPlayer.goals = Number(data_entries[2][1].toString());
+        newPlayer.matches = Number(data_entries[3][1].toString());
+        newPlayer.skill = Number(data_entries[4][1].toString());
+        Object.entries(EPosition).forEach(pos => {
+            if(pos[0].toString() == data_entries[5][1].toString()){
+                newPlayer.position = pos[1];
+                
+            }
+        });
+        await HttpService.updateEntry(clickedPlayer, newPlayer, newPlayer.id, CategoryID.IPlayers, "players");
+
+
+    });
+}
+

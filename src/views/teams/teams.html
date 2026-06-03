@@ -1,0 +1,39 @@
+<div class="tab-content">
+    <table id="teamsTable" class="table">
+        <thead>
+            <th>#</th>
+            <th>Név</th>
+            <th>Pontok</th>
+            <th>Játékosok száma</th>
+            <th>Műveletek</th>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="update-modal-label">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="fs-5">Csapat szerkesztése</h1>
+            </div>
+            <form action="#" id="adatok" class="p-3">
+                <div>
+                    <label for="name" class="form-label">Név: </label>
+                    <input id="name" type="text" name="name" class="form-control mb-3">
+
+
+                    <div class="form-label">Játékosok:</label>
+                    <div id="players"></div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Bezár</button>
+                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Mentés</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

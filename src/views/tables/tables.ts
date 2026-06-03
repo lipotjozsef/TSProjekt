@@ -47,12 +47,12 @@ function loadTableModal()
 
 function listenersForTableModal(): void
 {
-  const form: HTMLFormElement | null = document.querySelector("#form-modal");
+  const form: HTMLFormElement | null = application.querySelector("#form-modal");
 
   if (!form)
     throw new Error("A form element nem található, #form-modal!");
 
-  const cancelButton: HTMLButtonElement | null = document.querySelector<HTMLButtonElement>("#btn-modal-cancel");
+  const cancelButton: HTMLButtonElement | null = application.querySelector<HTMLButtonElement>("#btn-modal-cancel");
   cancelButton?.addEventListener("click", () =>  { form.reset(); });
 
   form.addEventListener("submit", async (ev: SubmitEvent) =>
@@ -107,7 +107,7 @@ function listenersForDetailModal()
 
 function listenerForTableChange(): Function | null
 {
-  const tableContainer = document.querySelector<HTMLElement>("#table-container");
+  const tableContainer = application.querySelector<HTMLElement>("#table-container");
   if (!tableContainer)
     return null;
 
@@ -127,7 +127,14 @@ function createTeamsInputsForModal(): void
   if (!divModalTeam)
     return;
 
-  HttpService.getTeams.forEach(team =>
+  const teams = HttpService.getTeams;
+
+  if (teams.length == 0)
+    return;
+
+  divModalTeam.innerHTML = '';
+
+  teams.forEach(team =>
   {
     divModalTeam.appendChild(
       createTeamInput(team)

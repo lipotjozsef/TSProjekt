@@ -103,16 +103,19 @@ var consoleVerbose = false;
 var console = (function(oldCons){
     return {
         log: function(...data: any[]){
-          if(consoleVerbose) oldCons.log(data);  
+          if(consoleVerbose) oldCons.log(...data);  
         },
         info: function (...data: any[]) {
-            if(consoleVerbose) oldCons.info(data);
+            if(consoleVerbose) oldCons.info(...data);
         },
         warn: function (...data: any[]) {
-            if(consoleVerbose) oldCons.warn(data);
+            if(consoleVerbose) oldCons.warn(...data);
         },
         error: function (...data: any[]) {
-            oldCons.error(data);
+            oldCons.error(...data);
+        },
+        debug: function(...data: any[]){
+          oldCons.log(...data);  
         }
     } as Console;
 }(window.console));

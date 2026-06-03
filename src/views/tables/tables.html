@@ -14,15 +14,17 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="fs-5" id="exampleModalLabel">Tabella Részletek</h1>
+        <h3 class="fw-bold" id="exampleModalLabel">Tabella Részletek</h3>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div>
         <input type="hidden" id="view-table-id" value="-1">
-        
+        <div id="detail-body" class="p-3">
+
+        </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Mégse</button>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Bezárás</button>
         <button type="button" class="btn btn-outline-danger" id="btn-detail-delete" data-bs-dismiss="modal">Törlés</button>
       </div>
     </div>

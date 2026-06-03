@@ -9,6 +9,7 @@ export interface ITeam extends IIdentifiable
     played: number,
     wins: number,
     draws: number,
-    loses: number
+    loses: number,
+    matchHistory: string[] | undefined
 
 }

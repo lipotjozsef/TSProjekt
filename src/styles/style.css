@@ -1,0 +1,102 @@
+* {
+  font-family: 'Arial Narrow', Arial, sans-serif;
+}
+
+body
+{
+  width: 100vw;
+  height: 100vh;
+  min-width: 360px;
+  transition: 1.5s;
+}
+
+#app main {
+  min-width: 360px;
+}
+
+#team-body, #detail-table
+{
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+#app .position-absolute
+{
+  height: 80vh;
+}
+
+.btn-link {
+  background-color: #00000000;
+  border: none;
+}
+
+.title-header
+{
+  background-image: linear-gradient(180deg,rgb(255, 255, 255) 0%, rgb(202, 202, 202) 100%);
+  font-weight: bolder;
+  color: transparent;
+  background-clip: text;
+}
+
+.tab-result-ico
+{
+  width: 1em;
+}
+
+.modal-dialog
+{
+  width: 65% !important;
+  max-width: 1200px !important;
+}
+
+#detail-table tr
+{
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.table-detail-container
+{
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+/* Mobil eszközök */
+@media only screen and (max-width: 460px)
+{
+  .btn
+  {
+    padding: 5px 3px !important;
+  }
+  
+  .modal-dialog
+  {
+    width: 360px !important;
+  }
+  
+  #detail-table
+  {
+    width: 360px !important;
+  }
+
+}
+
+/* Tablet eszközök */
+
+@media only screen and (max-width: 768px)
+{
+   * {
+    font-size: 14px;
+  }
+
+  .w-75
+  {
+    width: 90vw !important;
+  }
+
+  .mx-3
+  {
+    margin: 0px !important;
+  }
+}

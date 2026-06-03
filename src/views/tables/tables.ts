@@ -1,35 +1,35 @@
-import { TableManager } from '../../storage/localstorage.service'
-import type { ITable } from "../../types/ITable";
-import { HttpService, CategoryID } from '../../api/http.service'
-import * as HttpInterfaces from '../../types/TSTypes'
+import { TableManager } from '../../storage/tablemanager.service.ts'
+import { HttpService } from '../../api/http.service'
+
+import * as SimulationUtils from './utils/simulationForm.ts';
+import * as tabDeletionUtils from './utils/tabDeletion.ts';
+import * as HTMLUtils from './utils/htmlUtils.ts';
+
+import { createTeamInput } from './utils/modalTeamInput.ts';
+import { renderTableView } from './utils/tabChange.ts';
+
+import tabCreatorModal from './HTMLcode/tabCreatorModal.html?raw';
 
 let application: HTMLElement;
 
-import tableModal from './tablemodal.html?raw';
-
-export interface ElementOptions {
-    name: string;
-    parent: HTMLElement | null;
-    id: string;
-    className: string;
-    innerHTML: string;
-    innerText: string;
-    attributes: object;
-}
-
-export function init(parent: HTMLElement, _: Function)
+export function init(parent: HTMLElement, _: Function): Function
 {
   application = parent;
-
-  listenForTableChange();
+  const destroyListener = listenerForTableChange();
 
   TableManager.loadStorage();
-
   loadTableModal();
-  createTableModalTeams();
 
-  listenForTableModal();
-  listenForDetailModal();
+  createTeamsInputsForModal();
+
+  listenersForDetailModal();
+  listenersForTableModal();
+
+  return () =>
+  {
+    if (destroyListener)
+      destroyListener();
+  }
 }
 
 function loadTableModal()
@@ -41,135 +41,86 @@ function loadTableModal()
         return;
 
     modalTitle.innerText = "Tabella Kreáló"
-    modalBody.innerHTML = tableModal;
+    modalTitle.classList = "modal-title fw-bold text-decoration-underline p-1";
+    modalBody.innerHTML = tabCreatorModal;
 }
 
-
-function listenForTableModal(): void
+function listenersForTableModal(): void
 {
   const form: HTMLFormElement | null = document.querySelector("#form-modal");
 
   if (!form)
     throw new Error("A form element nem található, #form-modal!");
 
-  form.addEventListener("submit", (ev: SubmitEvent) =>
+  const cancelButton: HTMLButtonElement | null = document.querySelector<HTMLButtonElement>("#btn-modal-cancel");
+  cancelButton?.addEventListener("click", () =>  { form.reset(); });
+
+  form.addEventListener("submit", async (ev: SubmitEvent) =>
   {
     ev.preventDefault();
 
-    const data = new FormData(form);
-    let tableName = data.get("tableName")!.toString();
-    let teams = data.getAll("csapat_id").map(val => val.toString());
-    
-    if (!tableName)
+    const formData = SimulationUtils.extractSimulationData(form);
+    if (!SimulationUtils.validateTableForm(formData)) return;
+
+    try
     {
-      alert("Kérem adjon meg tabella nevet!");
-      return;
+      await SimulationUtils.createAndSimulateTable(formData);
+      HTMLUtils.closeModal(application, "btn-modal-submit", "modal");
+      form.reset();
     }
-
-    if (teams.length < 2)
+    catch (error)
     {
-      alert("Legalább 2 csapatot ki kell választani a tabellához!");
-      return;
+      console.error("Hiba történt a szimuláció vagy mentése során: ", error);
     }
-
-    TableManager.addTable(tableName, teams);
-
-    const submitButton = application.querySelector<HTMLButtonElement>("#btn-modal-submit");
-
-    if (submitButton)
-    {
-      submitButton.setAttribute("data-bs-dismiss", "modal");
-      submitButton.click();
-      submitButton.setAttribute("data-bs-dismiss", "");
-    }
-
-    form.reset();
   });
 }
 
-function listenForDetailModal()
+function listenersForDetailModal()
 {
   const deleteButton = application.querySelector<HTMLButtonElement>("#btn-detail-delete");
+  const tableHiddenInput = application.querySelector<HTMLInputElement>("#view-table-id");
 
-  if (!deleteButton)
+  if (!deleteButton || !tableHiddenInput)
     return;
 
-  deleteButton.addEventListener("click", () =>
+  deleteButton.addEventListener("click", async () =>
   {
-    const tableHiddenInput = application.querySelector<HTMLInputElement>("#view-table-id");
-    if (!tableHiddenInput)
-      return;
+    if (!confirm('Biztosan végleg törli ezt a tabellát?')) return;
 
-    const tableID = Number.parseInt(tableHiddenInput.value);
-
-    TableManager.deleteTable(tableID);
+    const tableID = Number.parseInt(tableHiddenInput.value, 10);
+    const tableData = TableManager.getTable(tableID);
+    
+    if (tableData) {
+      if (tableData.initialSnapshot)
+      {
+        tabDeletionUtils.rollBackTabData(tableData);
+        await tabDeletionUtils.rollbackOnServer(tableData);
+        
+        TableManager.deleteTable(tableID);
+        TableManager.saveStorage();
+      }
+    }
 
     tableHiddenInput.value = '-1';
   });
 }
 
-function listenForTableChange(): void
+function listenerForTableChange(): Function | null
 {
-  const tableContainer = document.querySelector("#table-container");
+  const tableContainer = document.querySelector<HTMLElement>("#table-container");
   if (!tableContainer)
-    return;
+    return null;
 
-  if (TableManager.getTablesLenght == 0)
-  {
-    tableContainer.innerHTML = '';
-    const parentrow = createElement<HTMLElement>(
-      {
-        name: "div",
-        className: "row text-center border-bottom",
-        parent: tableContainer
-      } as ElementOptions
-    );
-    parentrow.innerHTML =
-    `
-      <p class="fst-italic">Jelenleg nincsen egy tabella sem felvéle...</p>
-    `;
-  }
+  const handler = () => renderTableView(tableContainer, application);
 
-  window.addEventListener("tableschanged", () =>
-  {
+  window.addEventListener("tableschanged", handler);
 
-    tableContainer.innerHTML = '';
-
-    TableManager.getTables.forEach((table: ITable, tableIndex: number) =>
-    {
-      const parentrow = createElement<HTMLElement>(
-        {
-          name: "div",
-          className: "row",
-          parent: tableContainer
-        } as ElementOptions
-      );
-
-      parentrow.innerHTML =
-      `
-        <div class="col-6">
-          <p>${table.name}</p>
-        </div>
-        <div class="col-6 text-end">
-          <button type="button" class="btn-link text-decoration-underline text-primary" data-bs-toggle="modal" data-bs-target="#details-model">
-            Részletek
-          </button>
-        </div>
-      `;
-
-      parentrow.querySelector<HTMLButtonElement>(".btn-link")?.addEventListener("click", () =>
-      {
-          const tableHiddenInput = application.querySelector<HTMLInputElement>("#view-table-id");
-          if (!tableHiddenInput)
-            return;
-          tableHiddenInput.value = tableIndex.toString();
-      });
-    }
-    )
-  });
+  return () => { 
+    window.removeEventListener("tableschanged", handler);
+   };
 }
 
-function createTableModalTeams(): void
+function createTeamsInputsForModal(): void
 {
   const divModalTeam: HTMLElement | null = application!.querySelector("#team-body");
 
@@ -184,62 +135,3 @@ function createTableModalTeams(): void
   })
 }
 
-function createTeamInput(team: HttpInterfaces.ITeam): HTMLElement
-{
-
-  const parent = createElement<HTMLElement>(
-    {
-      name: "div",
-      className: "form-check"
-    } as ElementOptions
-  )
-
-  const teamIDValue: string = team.id!.toString();
-  const checkboxID: string = `csapat_id`;
-
-  const teamCheckbox: HTMLInputElement = createElement<HTMLInputElement>(
-    {
-      name: "input",
-      className: "form-check-input",
-      id: checkboxID,
-      attributes: {
-        "type": "checkbox",
-        "name": checkboxID,
-        "value": teamIDValue
-      },
-      parent: parent
-    } as ElementOptions
-  )
-
-  const teamLabel: HTMLLabelElement = createElement<HTMLLabelElement>(
-    {
-      name: "label",
-      className: "form-check-label",
-      innerText: team.name,
-      attributes:
-      {
-        "for": checkboxID
-      },
-      parent: parent
-    } as ElementOptions
-  )
-
-  return parent;
-}
-
-function createElement<T extends HTMLElement>({ name, parent, id, innerHTML, innerText, className, attributes }: ElementOptions): T {
-  const el = document.createElement(name) as T;
-  parent?.appendChild(el);
-  if (id) el.id = id;
-  if (className) el.className = className;
-  if (innerHTML) el.innerHTML = innerHTML;
-  if (innerText) el.innerText = innerText;
-
-  if(attributes != undefined) {
-    Object.entries(attributes)?.forEach(([key, value]) => {
-      el.setAttribute(String(key), String(value));
-    })
-  }
-
-  return el;
-}

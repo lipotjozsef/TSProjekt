@@ -1,33 +1,33 @@
-<header class="border-bottom text-center py-3">
-    <h3>Athletica</h3>
+<header class="border-bottom text-center py-3 bg-dark">
+    <h3 class="title-header">Athletica 🏆</h3>
 </header>
 
-<main class="my-5">
+<main class="my-5 d-block mx-auto w-75">
     <div class="row">
-        <div class="col-11">
+        <div class="col-9">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="tables-tab" data-view="tables" data-bs-toggle="tab"
                         data-bs-target="#tables-tab-pane" type="button" role="tab">Tabellák</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="players-tab" data-view="teams" data-bs-toggle="tab"
+                    <button class="nav-link" id="teams-tab" data-view="teams" data-bs-toggle="tab"
                         data-bs-target="#players-tab-pane" type="button" role="tab">Csapatok</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="teams-tab" data-view="players" data-bs-toggle="tab"
+                    <button class="nav-link" id="teams-tab" data-view="players" data-bs-toggle="tab"
                         data-bs-target="#teams-tab-pane" type="button" role="tab">Játékosok</button>
                 </li>
             </ul>
 
             
         </div>
-        <div class="col-1">
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#my-modal">Új felvétele</button>
+        <div class="col-3 text-start">
+            <button class="btn btn-primary mx-3" data-bs-toggle="modal" data-bs-target="#my-modal">Új felvétele</button>
         </div>
     </div>
 
-    <div class="tab-content" id="my-tab-content" class="py-3"></div>
+    <div class="tab-content border rounded-2" id="my-tab-content" class="py-3"></div>
 
     <div class="modal fade" id="my-modal" tabindex="-1" aria-labelledby="my-modal" aria-hidden="true">
         <div class="modal-dialog">
@@ -39,7 +39,7 @@
                     <div class="modal-body"></div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Mégse</button>
+                        <button type="button" class="btn btn-secondary" id="btn-modal-cancel" data-bs-dismiss="modal">Mégse</button>
                         <button type="submit" class="btn btn-primary" id="btn-modal-submit">Létrehozása</button>
                     </div>
                 </form>

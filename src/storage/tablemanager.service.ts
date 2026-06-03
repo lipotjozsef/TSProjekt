@@ -87,7 +87,7 @@ export abstract class TableManager
         const newTable: ITable = {
             name: tableName,
             teams: teams,
-            teamResults: new Map<number, ITeam>(),
+            teamResults: new Map<string, ITeam>(),
             initialSnapshot: {teams: [], players: []}
         };
 

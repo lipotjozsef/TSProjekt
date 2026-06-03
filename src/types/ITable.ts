@@ -5,6 +5,6 @@ export interface ITable
 {
     name: string;
     teams: string[];
-    teamResults: Map<number, ITeam>,
+    teamResults: Map<string, ITeam>,
     initialSnapshot: {teams: ITeam[], players: IPlayer[]}
 }

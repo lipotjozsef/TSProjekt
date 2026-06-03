@@ -9,7 +9,7 @@ export function rollBackTabData(data: ITable)
 
   initialSnapshot.teams.forEach((oldTeam: HttpInterfaces.ITeam) => {
     const currentTeam = HttpService.getTeams.find(t => t.id === oldTeam.id);
-    const resultDelta = teamResults.get(Number(oldTeam.id));
+    const resultDelta = teamResults.get(oldTeam.id!);
 
     if (currentTeam && resultDelta) {
       currentTeam.points += resultDelta.points;
@@ -22,11 +22,11 @@ export function rollBackTabData(data: ITable)
 
   initialSnapshot.players.forEach((oldPlayer: HttpInterfaces.IPlayer) => {
     const currentPlayer = HttpService.getPlayers.find(p => p.id === oldPlayer.id);
-    
-    if (currentPlayer && teamResults.has(Number(oldPlayer.teamID))) {
+
+    if (currentPlayer && teamResults.has(oldPlayer.teamID.toString())) {
       const goalsGained   = Math.max(0, currentPlayer.goals - oldPlayer.goals);
       const matchesGained = Math.max(0, currentPlayer.matches - oldPlayer.matches);
-          
+    
       currentPlayer.goals   -= Math.max(0, goalsGained);
       currentPlayer.matches -= Math.max(0, matchesGained);
     }
@@ -41,7 +41,6 @@ export async function rollbackOnServer(data: ITable): Promise<void>
       
   const serverTeamsToUpdate = HttpService.getTeams.filter(t => playingTeamIDs.has(t.id ?? ''));
   const serverPlayersToUpdate = HttpService.getPlayers.filter(p => playingTeamIDs.has(p.teamID.toString()));
-
   try
   {
     await Promise.all([

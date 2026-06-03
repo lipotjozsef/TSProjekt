@@ -79,7 +79,7 @@ function fillDetailModal(tableIndex: string, application: HTMLElement): void
   modalBody.innerHTML = '';
 
   const index = Number.parseInt(tableIndex)
-  const teams: Map<number, HttpInterfaces.ITeam> = TableManager.getTable(index).teamResults;
+  const teams: Map<string, HttpInterfaces.ITeam> = TableManager.getTable(index).teamResults;
 
   let leaderboard: HttpInterfaces.ITeam[] = [];
   if (teams)

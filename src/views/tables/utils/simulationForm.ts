@@ -96,11 +96,11 @@ export function runSimulationRound(
 
       if (matchSnapshotA.points !== undefined || matchSnapshotB.points !== undefined)
       {
-        const existingA = table.teamResults.get(Number(teamA.id));
-        const existingB = table.teamResults.get(Number(teamB.id));
+        const existingA = table.teamResults.get(teamA.id);
+        const existingB = table.teamResults.get(teamB.id);
 
-        table.teamResults.set(Number(teamA.id), Simulation.addToResult(matchSnapshotA, existingA));
-        table.teamResults.set(Number(teamB.id), Simulation.addToResult(matchSnapshotB, existingB)); 
+        table.teamResults.set(teamA.id, Simulation.addToResult(matchSnapshotA, existingA));
+        table.teamResults.set(teamB.id, Simulation.addToResult(matchSnapshotB, existingB)); 
       }
     }
   }

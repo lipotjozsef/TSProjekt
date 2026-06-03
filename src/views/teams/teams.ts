@@ -3,10 +3,14 @@ import * as HttpInterfaces from '../../types/TSTypes'
 
 import teamModal from "./teamModal.html?raw"
 
-let application: HTMLElement;
+let application: HTMLElement | null;
 
 export function init(parent: HTMLElement, _: Function) {
     application = parent;
+
+    if (!application)
+        return () => {};
+
     loadTableModal();
     displayTeams();
 
@@ -19,28 +23,29 @@ export function init(parent: HTMLElement, _: Function) {
     listenForUpdateTeam();
     listenForCreateTeam();
  
-    document.getElementById("main-new-btn")?.addEventListener("click", createPlayerInputs);
+    application.querySelector("#main-new-btn")?.addEventListener("click", createPlayerInputs);
 
     return () => {
         window.removeEventListener("cachechanged", handler);
-        document.getElementById("main-new-btn")?.removeEventListener("click", createPlayerInputs);
+        application!.querySelector("#main-new-btn")?.removeEventListener("click", createPlayerInputs);
+        application = null;
     }
 }
 
 function createPlayerInputs()
 {
-    (document.getElementById("name") as HTMLInputElement).value = "";
-    document.getElementById("players_new")!.innerHTML = ' '
+    (application!.querySelector("#name") as HTMLInputElement).value = "";
+    application!.querySelector("#players_new")!.innerHTML = ' '
     HttpService.getPlayers.forEach(p => {
         let checkbox = `<input type='checkbox' id='${p.id}_player_new' name='${p.id}_player_new'><label for='${p.id}_player_new'>${p.name}</label><br>`;
-        document.getElementById("players_new")!.innerHTML += checkbox;
+        application!.querySelector("#players_new")!.innerHTML += checkbox;
     });
 }
 
 function loadTableModal()
 {
-    const modalTitle = application.querySelector<HTMLElement>(".modal-title");
-    const modalBody = application.querySelector<HTMLElement>(".modal-body");
+    const modalTitle = application!.querySelector<HTMLElement>(".modal-title");
+    const modalBody = application!.querySelector<HTMLElement>(".modal-body");
 
     if (!modalTitle || !modalBody)
         return;
@@ -52,8 +57,8 @@ function loadTableModal()
 
 async function displayTeams() {
 
-    const tabContent = document.querySelector<HTMLElement>(".tab-content");
-    const table = document.querySelector<HTMLTableElement>("#teamsTable");
+    const tabContent = application!.querySelector<HTMLElement>(".tab-content");
+    const table = application!.querySelector<HTMLTableElement>("#teamsTable");
 
     if (!tabContent || !table)
         return;
@@ -78,7 +83,7 @@ async function displayTeams() {
         tbody.appendChild(tr);
     });
 
-    document.querySelector("#teamsTable")?.addEventListener("click", async (e) => {
+    application!.querySelector("#teamsTable")?.addEventListener("click", async (e) => {
         let btn = e.target as HTMLButtonElement;
         let id = btn.dataset.id!;
         if (btn.classList.contains("btn-delete")) {
@@ -94,12 +99,12 @@ async function displayTeams() {
                     team = t
                 }
             });
-            document.getElementById("adatok")!.dataset.id = team!.id!.toString();
-            (document.getElementById("name") as HTMLInputElement).value = team!.name;
-            document.getElementById("players")!.innerHTML = ' '
+            application!.querySelector<HTMLFormElement>("#adatok")!.dataset.id = team!.id!.toString();
+            (application!.querySelector("#name") as HTMLInputElement).value = team!.name;
+            application!.querySelector("#players")!.innerHTML = ' '
             HttpService.getPlayers.forEach(p => {
                 let checkbox = `<input type='checkbox' id='${p.id}_player' name='${p.id}_player' ${p.teamID == team.id ? "checked" : ""}><label for='${p.id}_player'>${p.name}</label><br>`;
-                document.getElementById("players")!.innerHTML += checkbox;
+                application!.querySelector("#players")!.innerHTML += checkbox;
             })
         }
         // if (btn.classList.contains("btn-create")) {
@@ -118,7 +123,7 @@ function getPlayerNumber(id: string | undefined): number {
 }
 
 function listenForCreateTeam() {
-    let form = document.querySelector<HTMLFormElement>("#form-modal");
+    let form = application!.querySelector<HTMLFormElement>("#form-modal");
     if (!form) {
         console.log("GATYA");
         return;
@@ -161,7 +166,7 @@ function listenForCreateTeam() {
 }
 
 function listenForUpdateTeam() {
-    let form = document.querySelector<HTMLFormElement>("#adatok");
+    let form = application!.querySelector<HTMLFormElement>("#adatok");
     if (!form) {
         console.log("GATYA");
         
